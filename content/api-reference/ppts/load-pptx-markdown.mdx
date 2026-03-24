@@ -1,0 +1,31 @@
+---
+title: '加载 PPT 大纲内容'
+---
+
+# 加载 PPT 大纲内容
+
+## 接口信息
+
+- 方法：`POST`
+- 路径：`/api/ppt/loadPptxMarkdown`
+- 鉴权：请求头传 `token`
+
+## 接口作用
+
+获取某个 PPT 对应的 Markdown 大纲与内容。
+
+## 请求参数
+
+```json
+{
+  "id": "ppt_xxx",
+  "format": "tree"
+}
+```
+
+- `format=text`：返回 `markdownText`
+- `format=tree`：返回 `markdownTree`
+
+## 适用场景
+
+适合做编辑回显、结构分析或二次生成前的内容恢复。

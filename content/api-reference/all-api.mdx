@@ -1,0 +1,83 @@
+---
+title: '全部 API 接口'
+---
+
+# 全部 API 接口
+
+以下表格按使用场景整理所有接口。`V1` 相关接口均保留，并在名称或说明中标明兼容属性。
+
+## 鉴权与接入
+
+| API 名称 | API 的作用 |
+| --- | --- |
+| [createApiToken](/api-reference/auth/create-api-token) | 创建临时调用 Token，用于后续接口鉴权与用户隔离 |
+
+## V2 生成流程
+
+| API 名称 | API 的作用 |
+| --- | --- |
+| [createTask](/api-reference/v2/create-task) | 创建一个新的 V2 生成任务 |
+| [options](/api-reference/v2/options) | 获取语言、场景、受众、篇幅等生成选项 |
+| [generateContent](/api-reference/v2/generate-content) | 为任务流式生成大纲与内容 |
+| [updateContent](/api-reference/v2/update-content) | 按修改意见重写任务内容 |
+| [generatePptx](/api-reference/v2/generate-pptx) | 根据任务和 Markdown 生成最终 PPT |
+
+## V1 兼容接口
+
+| API 名称 | API 的作用 |
+| --- | --- |
+| [parseFileData](/api-reference/v1/parse-file-data) | 把文件、文本、链接等输入预处理为 `dataUrl` |
+| [generateOutline（V1）](/api-reference/v1/generate-outline) | 流式生成 PPT 大纲 |
+| [updateOutline（V1）](/api-reference/v1/update-outline) | 修改大纲结构与章节组织 |
+| [generateContent（V1）](/api-reference/v1/generate-content) | 根据大纲生成正文内容 |
+| [generatePptx（V1）](/api-reference/v1/generate-pptx) | 根据完整 Markdown 内容生成 PPT |
+| [word2pptx](/api-reference/v1/word-to-ppt) | 直接把 Word 精准转换为 PPT |
+| [directGeneratePptx](/api-reference/v1/direct-generate-pptx) | 一步直生成 PPT，适合快速体验 |
+| [generateContent async mode](/api-reference/v1/async-generate-content) | 生成内容时异步产出 PPT 进度 |
+| [asyncPptInfo](/api-reference/v1/async-ppt-info) | 查询异步生成中的 PPT 数据 |
+| [chat/completions](/api-reference/v1/chat-completions) | 用兼容 OpenAI Chat 的方式生成 PPT |
+
+## 模板接口
+
+| API 名称 | API 的作用 |
+| --- | --- |
+| [template/options](/api-reference/templates/template-options) | 获取模板筛选项 |
+| [templates](/api-reference/templates/list-templates) | 分页查询模板列表 |
+| [randomTemplates](/api-reference/templates/random-templates) | 随机获取一批模板 |
+
+## PPT 获取与操作
+
+| API 名称 | API 的作用 |
+| --- | --- |
+| [listPptx](/api-reference/ppts/list-pptx) | 分页查询当前用户 PPT 列表 |
+| [loadPptx](/api-reference/ppts/load-pptx) | 加载单个 PPT 的完整数据 |
+| [loadPptxMarkdown](/api-reference/ppts/load-pptx-markdown) | 获取生成该 PPT 的 Markdown 大纲内容 |
+| [downloadPptx](/api-reference/ppts/download-pptx) | 获取 PPT 下载链接 |
+| [downloadWithAnimation](/api-reference/ppts/download-with-animation) | 下载自动添加智能动画的 PPT |
+| [updatePptTemplate](/api-reference/ppts/update-ppt-template) | 为已有 PPT 更换模板 |
+| [updatePptxAttr](/api-reference/ppts/update-pptx-attr) | 更新 PPT 名称或主题 |
+| [addPptLogo](/api-reference/ppts/add-ppt-logo) | 为 PPT 设置 Logo |
+| [removePptLogo](/api-reference/ppts/remove-ppt-logo) | 从 PPT 中移除 Logo |
+| [savePptx](/api-reference/ppts/save-pptx) | 保存编辑后的 PPT 数据并重新渲染 |
+| [delete](/api-reference/ppts/delete-ppt) | 删除 PPT |
+
+## 自定义模板
+
+| API 名称 | API 的作用 |
+| --- | --- |
+| [uploadTemplate](/api-reference/custom-templates/upload-template) | 上传或覆盖自定义模板 |
+| [downloadTemplate](/api-reference/custom-templates/download-template) | 下载自定义模板 |
+| [delTemplateId](/api-reference/custom-templates/delete-template) | 删除自定义模板 |
+| [updateTemplate](/api-reference/custom-templates/update-template) | 修改自定义模板名称 |
+| [updateUserTemplate](/api-reference/custom-templates/update-user-template) | 设置模板是否为 Api-Key 级公共模板 |
+
+## 积分与记录
+
+| API 名称 | API 的作用 |
+| --- | --- |
+| [apiInfo](/api-reference/records/api-info) | 查询剩余与已用积分 |
+| [record/listPage](/api-reference/records/record-list) | 查询积分使用记录列表 |
+| [record/getById](/api-reference/records/record-detail) | 查询单条记录详情 |
+| [record/statisticHours](/api-reference/records/record-statistic-hours) | 按小时统计调用与积分消耗 |
+| [record/statisticDays](/api-reference/records/record-statistic-days) | 按天统计调用与积分消耗 |
+| [listAllPptx](/api-reference/records/list-all-pptx) | 查询当前 Api-Key 下的全部 PPT |

@@ -1,0 +1,125 @@
+---
+title: '创建任务'
+---
+
+# 创建任务
+
+## 接口信息
+
+- 方法：`POST`
+- 路径：`/api/ppt/v2/createTask`
+- 鉴权：请求头传 `token`
+- 请求体：`multipart/form-data`
+
+## 接口作用
+
+创建一个新的 V2 生成任务。后续的内容生成、内容修改和 PPT 生成都依赖这个任务 ID。
+
+## 请求参数
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `type` | `1-7` | 是 | 1 智能生成；2 上传文件；3 思维导图；4 Word 精准转 PPT；5 网页链接；6 粘贴文本；7 Markdown 大纲 |
+| `content` | `string` | 否 | 根据 `type` 传主题、网页链接、文本内容或 Markdown |
+| `file` | `File[]` | 否 | 文件数不超过 5 个，总大小不超过 50M |
+
+## 关键说明
+
+- `type=1` 时，`content` 为主题或要求，且可附加参考文件
+- `type=2`、`type=4` 时通常通过 `file` 传原始内容
+- `type=5` 传网页 URL
+- `type=6` 传粘贴文本
+- `type=7` 传 Markdown 大纲
+
+## 响应示例
+
+```json
+{
+  "data": {
+    "id": "task_xxx"
+  },
+  "code": 0,
+  "message": "操作成功"
+}
+```
+
+## 多语言示例
+
+<ApiCodeTabs
+  node={`const formData = new FormData()
+formData.append('type', '1')
+formData.append('content', '请生成一份关于 AI 办公趋势的产品介绍 PPT')
+
+const response = await fetch('https://docmee.cn/api/ppt/v2/createTask', {
+  method: 'POST',
+  headers: {
+    token: 'YOUR_TEMP_TOKEN'
+  },
+  body: formData
+})
+
+console.log(await response.json())`}
+  python={`import requests
+
+response = requests.post(
+    'https://docmee.cn/api/ppt/v2/createTask',
+    headers={'token': 'YOUR_TEMP_TOKEN'},
+    data={'type': '1', 'content': '请生成一份关于 AI 办公趋势的产品介绍 PPT'}
+)
+
+print(response.json())`}
+  go={`package main
+
+import (
+  "bytes"
+  "fmt"
+  "io"
+  "mime/multipart"
+  "net/http"
+)
+
+func main() {
+  var body bytes.Buffer
+  writer := multipart.NewWriter(&body)
+  writer.WriteField("type", "1")
+  writer.WriteField("content", "请生成一份关于 AI 办公趋势的产品介绍 PPT")
+  writer.Close()
+
+  req, _ := http.NewRequest("POST", "https://docmee.cn/api/ppt/v2/createTask", &body)
+  req.Header.Set("token", "YOUR_TEMP_TOKEN")
+  req.Header.Set("Content-Type", writer.FormDataContentType())
+
+  resp, _ := http.DefaultClient.Do(req)
+  defer resp.Body.Close()
+  data, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(data))
+}`}
+  java={`import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class CreateTaskExample {
+  public static void main(String[] args) throws IOException, InterruptedException {
+    String boundary = "----DocmeeBoundary";
+    String body = "--" + boundary + "\\r\\n"
+      + "Content-Disposition: form-data; name=\\"type\\"\\r\\n\\r\\n1\\r\\n"
+      + "--" + boundary + "\\r\\n"
+      + "Content-Disposition: form-data; name=\\"content\\"\\r\\n\\r\\n请生成一份关于 AI 办公趋势的产品介绍 PPT\\r\\n"
+      + "--" + boundary + "--\\r\\n";
+
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create("https://docmee.cn/api/ppt/v2/createTask"))
+      .header("token", "YOUR_TEMP_TOKEN")
+      .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+      .POST(HttpRequest.BodyPublishers.ofString(body))
+      .build();
+
+    HttpResponse<String> response = HttpClient.newHttpClient()
+      .send(request, HttpResponse.BodyHandlers.ofString());
+
+    System.out.println(response.body());
+  }
+}`}
+/>

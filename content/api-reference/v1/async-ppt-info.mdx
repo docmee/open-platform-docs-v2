@@ -1,0 +1,38 @@
+---
+title: '查询异步生成 PPT 信息'
+---
+
+# 查询异步生成 PPT 信息
+
+## 接口信息
+
+- 方法：`GET`
+- 路径：`/api/ppt/asyncPptInfo?pptId=`
+- 鉴权：请求头传 `token`
+
+## 接口作用
+
+查询异步生成流程中的当前 PPT 进度与中间数据。
+
+## 请求参数
+
+- `pptId`：来自异步 `generateContent` 流式响应
+
+## 响应示例
+
+```json
+{
+  "code": 0,
+  "data": {
+    "total": 23,
+    "current": 8,
+    "pptxProperty": "base64-gzip-json"
+  }
+}
+```
+
+## 使用说明
+
+- 不建议轮询
+- 在流式内容中每次收到新的 `pptId` 时调用一次即可
+- 数据是临时缓存，PPT 完成后约 30 秒内过期；之后请改用 [`loadPptx`](/api-reference/ppts/load-pptx)

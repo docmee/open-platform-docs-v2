@@ -1,0 +1,28 @@
+
+
+/* Optional: import Nextra theme styles */
+@import 'nextra-theme-docs/style.css'; /* or nextra-theme-blog/style.css */
+
+@variant dark (&:where(.dark *));
+@import "tailwindcss";
+
+
+
+.home-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.home-links a {
+  border: 1px solid #e5e7eb78;
+  border-radius: 10px;
+  padding: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.home-section {
+  margin-top: 28px;
+}

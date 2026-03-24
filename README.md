@@ -1,23 +1,17 @@
-# Nextra Docs Template 
+# DocMee 文档中心
 
-This is a template for creating documentation with [Nextra](https://nextra.site).
+基于 Nextra 4 的开放平台文档站点。
 
-[**Live Demo →**](https://nextra-docs-template.vercel.app)
+## Development
 
-[![](.github/screenshot.png)](https://nextra-docs-template.vercel.app)
+```bash
+pnpm install
+pnpm dev
+```
 
-## Quick Start
+## Build
 
-Click the button to clone this repository and deploy it on Vercel:
-
-[![](https://vercel.com/button)](https://vercel.com/new/clone?s=https%3A%2F%2Fgithub.com%2Fshuding%2Fnextra-docs-template&showOptionalTeamCreation=false)
-
-## Local Development
-
-First, run `pnpm i` to install the dependencies.
-
-Then, run `pnpm dev` to start the development server and visit localhost:3000.
-
-## License
-
-This project is licensed under the MIT License.
+```bash
+pnpm build
+pnpm start
+```

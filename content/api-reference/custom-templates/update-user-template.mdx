@@ -1,0 +1,28 @@
+---
+title: '设置为公共模板'
+---
+
+# 设置为公共模板
+
+## 接口信息
+
+- 方法：`POST`
+- 路径：`/api/ppt/updateUserTemplate`
+- 鉴权：请求头传 `Api-Key`
+
+## 接口作用
+
+将自定义模板设置为当前 `Api-Key` 账号级别的公共模板，使该 `Api-Key` 下创建的所有 Token 都可见。
+
+## 请求参数
+
+```json
+{
+  "templateId": "template_xxx",
+  "isPublic": true
+}
+```
+
+## 说明
+
+这里的“公共模板”是账号级共享，不是平台全局公共模板。

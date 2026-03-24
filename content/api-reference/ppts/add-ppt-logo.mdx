@@ -1,0 +1,34 @@
+---
+title: '设置 Logo'
+---
+
+# 设置 Logo
+
+## 接口信息
+
+- 方法：`POST`
+- 路径：`/api/ppt/addPptLogo`
+- 鉴权：请求头传 `token`
+- 请求体：`multipart/form-data`
+
+## 接口作用
+
+为指定 PPT 批量添加 Logo。
+
+## 主要参数
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `pptId` | `string` | 是 | PPT ID |
+| `image` | `File` | 是 | `png` 或 `jpg` |
+| `position` | `string` | 是 | 如 `TOP_RIGHT`、`BOTTOM_LEFT` |
+| `pageIndex` | `integer` | 否 | 指定页码，从 1 开始 |
+| `pageTypes` | `number[]` | 否 | 指定页面类型 |
+| `marginX` | `number` | 否 | X 边距 |
+| `marginY` | `number` | 否 | Y 边距 |
+| `scale` | `number` | 是 | 缩放比例 |
+| `rmOrgLogo` | `boolean` | 是 | 是否移除原有 Logo |
+
+## 响应说明
+
+成功后返回新的 `fileUrl` 下载地址。

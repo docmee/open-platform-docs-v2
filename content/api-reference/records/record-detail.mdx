@@ -1,0 +1,32 @@
+---
+title: '查询记录详情'
+---
+
+# 查询记录详情
+
+## 接口信息
+
+- 方法：`GET`
+- 路径：`/api/record/getById?id=`
+- 鉴权：请求头传 `Api-Key`
+
+## 接口作用
+
+获取单条积分记录对应的详细对象信息。
+
+## 请求参数
+
+- `id`：记录 ID
+
+## 返回内容
+
+可能包含：
+
+- `name`
+- `subject`
+- `coverUrl`
+- `fileUrl`
+- `templateId`
+- `createTime`
+
+资源地址访问时通常仍需要拼接 `token`。

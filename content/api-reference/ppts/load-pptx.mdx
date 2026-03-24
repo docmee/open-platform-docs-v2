@@ -1,0 +1,23 @@
+---
+title: '加载 PPT 数据'
+---
+
+# 加载 PPT 数据
+
+## 接口信息
+
+- 方法：`GET`
+- 路径：`/api/ppt/loadPptx?id=`
+- 鉴权：请求头传 `token`
+
+## 接口作用
+
+获取单个 PPT 的完整结构数据，适合在编辑器或管理后台中继续加载和展示。
+
+## 请求参数
+
+- `id`：PPT ID
+
+## 响应说明
+
+返回 `pptInfo`，结构与生成 PPT 接口中的 `pptInfo` 基本一致，通常包含 `coverUrl`、`templateId`、`pptxProperty` 等字段。

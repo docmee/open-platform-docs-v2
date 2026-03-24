@@ -1,0 +1,51 @@
+---
+title: '快速开始'
+---
+
+# 快速开始
+
+Docmee Open Platform 提供围绕 PPT 生成与管理的一整套 API，既支持推荐的 `V2` 任务式生成流程，也保留 `V1` 兼容接口，方便你按现有系统阶段逐步接入。
+
+## 你可以用 API 做什么
+
+- 根据主题、文档、网页、粘贴文本或 Markdown 生成 PPT
+- 流式生成大纲与内容，支持边生成边展示
+- 按模板风格生成或替换 PPT
+- 下载、保存、编辑和管理已生成的 PPT
+- 管理自定义模板、查询积分与调用记录
+
+## 推荐接入路径
+
+如果你是首次接入，推荐优先使用 `V2`：
+
+1. 调用 [`createApiToken`](/api-reference/auth/create-api-token) 获取调用令牌
+2. 调用 [`createTask`](/api-reference/v2/create-task) 创建生成任务
+3. 调用 [`generateContent`](/api-reference/v2/generate-content) 生成大纲与内容
+4. 调用 [`generatePptx`](/api-reference/v2/generate-pptx) 生成最终 PPT
+5. 按需调用模板、下载、保存等后续接口
+
+完整示例见 [生成第一份 PPT](/getting-started/first-ppt)。
+
+## 接口调用方式
+
+所有接口都需要鉴权，主要有两种方式：
+
+- 服务端先用 `Api-Key` 调用 [`createApiToken`](/api-reference/auth/create-api-token)，再把返回的 `token` 用于后续接口
+- 服务端直连场景下，也可直接在部分接口中使用 `Api-Key`
+
+后续 API 一般通过以下方式鉴权：
+
+- 请求头传 `token: xxx`
+- 封面图等资源地址通过 `?token=xxx` 访问
+
+## V2 与 V1 的关系
+
+- `V2` 是当前官方推荐方案，任务链路更清晰，适合新接入
+- `V1` 仍然保留，适合历史系统兼容或特定调用模式
+- 本文档会保留全部 `V1` 接口，并在 API 参考中明确标注兼容属性
+
+## 下一步
+
+- 首次体验：阅读 [生成第一份 PPT](/getting-started/first-ppt)
+- 查询全量接口：查看 [全部 API 接口](/api-reference/all-api)
+- 逐个查参数：进入 [API 参考](/api-reference)

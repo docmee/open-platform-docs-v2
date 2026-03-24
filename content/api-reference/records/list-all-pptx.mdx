@@ -1,0 +1,35 @@
+---
+title: '查询所有 PPT 列表'
+---
+
+# 查询所有 PPT 列表
+
+## 接口信息
+
+- 方法：`POST`
+- 路径：`/api/ppt/listAllPptx`
+- 鉴权：请求头传 `Api-Key`
+
+## 接口作用
+
+查询当前 `Api-Key` 账号在指定时间范围内生成的全部 PPT。
+
+## 请求参数
+
+```json
+{
+  "page": 1,
+  "size": 10,
+  "id": null,
+  "uid": null,
+  "templateId": null,
+  "startDate": "2024-01-01 00:00:00",
+  "endDate": "2025-01-01 23:59:59",
+  "desc": true
+}
+```
+
+## 说明
+
+- `size` 最大不超过 100
+- 适合做管理后台、审计看板或按账号汇总查询

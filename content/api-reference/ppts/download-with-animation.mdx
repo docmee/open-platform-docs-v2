@@ -1,0 +1,31 @@
+---
+title: '下载智能动画 PPT'
+---
+
+# 下载智能动画 PPT
+
+## 接口信息
+
+- 方法：`GET`
+- 路径：`/api/ppt/downloadWithAnimation?type=1&id=xxx`
+- 鉴权：请求头传 `token`
+
+## 接口作用
+
+在原有 PPT 基础上自动补充入场动画和切场动画，再返回文件流。
+
+## URL 参数
+
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `type` | `number` | `1` 依次展示；`2` 单击展示 |
+| `id` | `string` | PPT ID |
+
+## 响应
+
+返回 `application/octet-stream` 文件流。
+
+## 使用说明
+
+- `1` 更适合自动播放场景
+- `2` 更适合现场演示、逐项点击讲解

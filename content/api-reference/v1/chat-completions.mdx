@@ -1,0 +1,43 @@
+---
+title: '对话生成 PPT'
+---
+
+# 对话生成 PPT
+
+## 接口信息
+
+- 方法：`POST`
+- 路径：`/api/ppt-openai/v1/chat/completions`
+- 鉴权：支持 `Api-Key` 或 `Authorization: Bearer ...`
+
+## 接口作用
+
+用兼容 OpenAI Chat Completions 的方式生成 PPT，适合接入已经支持 OpenAI 接口规范的工具或代理层。
+
+## 请求参数
+
+```json
+{
+  "stream": true,
+  "model": "direct-generate-pptx",
+  "messages": [
+    {
+      "role": "user",
+      "content": "请生成一份关于 AI 未来发展的 PPT"
+    }
+  ]
+}
+```
+
+## 扩展参数
+
+- `appendLink`：是否在结果末尾附加封面和下载链接
+- `templateId`：指定模板
+- `lang`：输出语言
+- `prompt`：附加要求
+
+## 响应说明
+
+- 非流式模式下返回标准 Chat 响应结构
+- `choices[].message.content` 中是 Markdown 内容
+- `ppt_data` 中包含 PPT 生成结果的扩展信息

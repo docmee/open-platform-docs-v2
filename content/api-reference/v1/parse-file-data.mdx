@@ -1,0 +1,41 @@
+---
+title: '解析文件内容'
+---
+
+# 解析文件内容
+
+## 接口信息
+
+- 方法：`POST`
+- 路径：`/api/ppt/parseFileData`
+- 鉴权：请求头传 `token`
+- 请求体：`multipart/form-data`
+
+## 接口作用
+
+把文件、粘贴文本、文件链接、网页链接或搜索词预处理为 `dataUrl`，供 `V1` 系列生成接口复用。
+
+## 可用输入
+
+- `file`：上传文件
+- `content`：直接粘贴的文本
+- `fileUrl`：公网可访问的文件地址
+- `website`：网页地址
+- `websearch`：搜索关键词
+
+## 响应示例
+
+```json
+{
+  "data": {
+    "dataUrl": "https://xxx"
+  },
+  "code": 0
+}
+```
+
+## 说明
+
+- 文件大小限制 50M
+- `dataUrl` 当天有效
+- 适合先做内容解析，再进入 `generateOutline` 或 `directGeneratePptx`

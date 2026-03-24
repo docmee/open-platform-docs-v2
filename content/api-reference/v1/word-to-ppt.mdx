@@ -1,0 +1,29 @@
+---
+title: 'Word 转 PPT'
+---
+
+# Word 转 PPT
+
+## 接口信息
+
+- 方法：`POST`
+- 路径：`/api/ppt/v1/word2pptx`
+- 鉴权：请求头传 `token`
+- 请求体：`multipart/form-data`
+
+## 接口作用
+
+尽可能保留 Word 文件原有层级结构和内容表达，直接生成 PPT。
+
+## 请求参数
+
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `file` | `File` | `docx` 文件，小于 30M |
+| `templateId` | `string` | 模板 ID，可空 |
+| `stream` | `boolean` | 是否流式返回 |
+
+## 响应说明
+
+- 非流式模式下返回 `pptInfo`
+- 可直接拿到生成后的 PPT 文件和结构数据
