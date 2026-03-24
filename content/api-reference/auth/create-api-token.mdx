@@ -43,8 +43,11 @@ title: '创建接口 Token'
 
 ## 多语言示例
 
-<ApiCodeTabs
-  node={`const response = await fetch('https://docmee.cn/api/user/createApiToken', {
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch('https://docmee.cn/api/user/createApiToken', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -57,8 +60,14 @@ title: '创建接口 Token'
   })
 })
 
-console.log(await response.json())`}
-  python={`import requests
+console.log(await response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
 
 response = requests.post(
     'https://docmee.cn/api/user/createApiToken',
@@ -69,8 +78,14 @@ response = requests.post(
     json={'uid': 'demo-user', 'limit': 10, 'timeOfHours': 2}
 )
 
-print(response.json())`}
-  go={`package main
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
 
 import (
   "bytes"
@@ -80,7 +95,7 @@ import (
 )
 
 func main() {
-  body := []byte(\`{"uid":"demo-user","limit":10,"timeOfHours":2}\`)
+  body := []byte(`{"uid":"demo-user","limit":10,"timeOfHours":2}`)
   req, _ := http.NewRequest("POST", "https://docmee.cn/api/user/createApiToken", bytes.NewBuffer(body))
   req.Header.Set("Content-Type", "application/json")
   req.Header.Set("Api-Key", "YOUR_API_KEY")
@@ -89,8 +104,14 @@ func main() {
   defer resp.Body.Close()
   data, _ := io.ReadAll(resp.Body)
   fmt.Println(string(data))
-}`}
-  java={`import java.net.URI;
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -111,8 +132,11 @@ public class CreateApiTokenExample {
 
     System.out.println(response.body());
   }
-}`}
-/>
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
 
 ## 使用说明
 

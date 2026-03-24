@@ -29,26 +29,24 @@ describe('docs center structure', () => {
     expect(metaText).toContain("title: 'API 参考'")
   })
 
-  it('supports reusable multi-language API code examples', () => {
+  it('supports multi-language API code examples with ApiCodeTabs and code fences', () => {
     expect(existsSync('components/mdx/ApiCodeTabs.tsx')).toBe(true)
 
     const mdxComponentsText = readFileSync('mdx-components.tsx', 'utf8')
     expect(mdxComponentsText).toContain('ApiCodeTabs')
+    expect(mdxComponentsText).toContain('ApiCodeTab')
 
     const firstPptText = readFileSync('content/getting-started/first-ppt.mdx', 'utf8')
-    expect(firstPptText).toContain('<ApiCodeTabs')
-    expect(firstPptText).toContain('node={`')
-    expect(firstPptText).toContain('python={`')
-    expect(firstPptText).toContain('go={`')
-    expect(firstPptText).toContain('java={`')
+    expect(firstPptText).toContain('<ApiCodeTabs items={[')
+    expect(firstPptText).toContain('<ApiCodeTab>')
+    expect(firstPptText).toContain('```js')
+    expect(firstPptText).toContain('```python')
+    expect(firstPptText).toContain('```go')
+    expect(firstPptText).toContain('```java')
   })
 
-  it('uses shiki for runtime syntax highlighting in API code tabs', () => {
+  it('does not rely on runtime shiki highlighting helpers', () => {
     const packageText = readFileSync('package.json', 'utf8')
-    expect(packageText).toContain('"shiki"')
-
-    const apiCodeTabsText = readFileSync('components/mdx/ApiCodeTabs.tsx', 'utf8')
-    expect(apiCodeTabsText).toContain("from 'shiki'")
-    expect(apiCodeTabsText).toContain('codeToHtml')
+    expect(packageText).not.toContain('"shiki"')
   })
 })

@@ -45,8 +45,11 @@ title: '创建任务'
 
 ## 多语言示例
 
-<ApiCodeTabs
-  node={`const formData = new FormData()
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const formData = new FormData()
 formData.append('type', '1')
 formData.append('content', '请生成一份关于 AI 办公趋势的产品介绍 PPT')
 
@@ -58,8 +61,14 @@ const response = await fetch('https://docmee.cn/api/ppt/v2/createTask', {
   body: formData
 })
 
-console.log(await response.json())`}
-  python={`import requests
+console.log(await response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
 
 response = requests.post(
     'https://docmee.cn/api/ppt/v2/createTask',
@@ -67,8 +76,14 @@ response = requests.post(
     data={'type': '1', 'content': '请生成一份关于 AI 办公趋势的产品介绍 PPT'}
 )
 
-print(response.json())`}
-  go={`package main
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
 
 import (
   "bytes"
@@ -93,8 +108,14 @@ func main() {
   defer resp.Body.Close()
   data, _ := io.ReadAll(resp.Body)
   fmt.Println(string(data))
-}`}
-  java={`import java.io.IOException;
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -121,5 +142,8 @@ public class CreateTaskExample {
 
     System.out.println(response.body());
   }
-}`}
-/>
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>

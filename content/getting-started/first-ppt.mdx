@@ -10,8 +10,11 @@ title: '生成第一份PPT'
 
 先在服务端使用 `Api-Key` 调用 [`createApiToken`](/api-reference/auth/create-api-token)。
 
-<ApiCodeTabs
-  node={`const response = await fetch('https://docmee.cn/api/user/createApiToken', {
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch('https://docmee.cn/api/user/createApiToken', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -25,8 +28,14 @@ title: '生成第一份PPT'
 })
 
 const result = await response.json()
-console.log(result)`}
-  python={`import requests
+console.log(result)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
 
 response = requests.post(
     'https://docmee.cn/api/user/createApiToken',
@@ -41,8 +50,14 @@ response = requests.post(
     }
 )
 
-print(response.json())`}
-  go={`package main
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
 
 import (
   "bytes"
@@ -52,7 +67,7 @@ import (
 )
 
 func main() {
-  body := []byte(\`{"uid":"demo-user","limit":10,"timeOfHours":2}\`)
+  body := []byte(`{"uid":"demo-user","limit":10,"timeOfHours":2}`)
   req, _ := http.NewRequest("POST", "https://docmee.cn/api/user/createApiToken", bytes.NewBuffer(body))
   req.Header.Set("Content-Type", "application/json")
   req.Header.Set("Api-Key", "YOUR_API_KEY")
@@ -62,8 +77,14 @@ func main() {
 
   data, _ := io.ReadAll(resp.Body)
   fmt.Println(string(data))
-}`}
-  java={`import java.net.URI;
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -90,8 +111,11 @@ public class CreateApiTokenExample {
 
     System.out.println(response.body());
   }
-}`}
-/>
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
 
 拿到返回的 `token` 后，后续请求都在 Header 中传入：
 
@@ -103,8 +127,11 @@ token: YOUR_TEMP_TOKEN
 
 调用 [`createTask`](/api-reference/v2/create-task) 创建任务。这里以 `type=1` 的智能生成为例。
 
-<ApiCodeTabs
-  node={`const formData = new FormData()
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const formData = new FormData()
 formData.append('type', '1')
 formData.append('content', '请生成一份关于 AI 办公趋势的产品介绍 PPT')
 
@@ -117,8 +144,14 @@ const response = await fetch('https://docmee.cn/api/ppt/v2/createTask', {
 })
 
 const result = await response.json()
-console.log(result)`}
-  python={`import requests
+console.log(result)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
 
 response = requests.post(
     'https://docmee.cn/api/ppt/v2/createTask',
@@ -129,8 +162,14 @@ response = requests.post(
     }
 )
 
-print(response.json())`}
-  go={`package main
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
 
 import (
   "bytes"
@@ -156,8 +195,14 @@ func main() {
 
   data, _ := io.ReadAll(resp.Body)
   fmt.Println(string(data))
-}`}
-  java={`import java.io.IOException;
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -184,8 +229,11 @@ public class CreateTaskExample {
 
     System.out.println(response.body());
   }
-}`}
-/>
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
 
 成功后会返回任务 `id`。
 
@@ -193,8 +241,11 @@ public class CreateTaskExample {
 
 调用 [`generateContent`](/api-reference/v2/generate-content) 为该任务生成大纲与正文内容。推荐使用流式模式。
 
-<ApiCodeTabs
-  node={`const response = await fetch('https://docmee.cn/api/ppt/v2/generateContent', {
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch('https://docmee.cn/api/ppt/v2/generateContent', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -212,8 +263,14 @@ public class CreateTaskExample {
 })
 
 const result = await response.text()
-console.log(result)`}
-  python={`import requests
+console.log(result)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
 
 response = requests.post(
     'https://docmee.cn/api/ppt/v2/generateContent',
@@ -232,8 +289,14 @@ response = requests.post(
     }
 )
 
-print(response.text)`}
-  go={`package main
+print(response.text)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
 
 import (
   "bytes"
@@ -243,7 +306,7 @@ import (
 )
 
 func main() {
-  body := []byte(\`{"id":"TASK_ID","stream":true,"length":"medium","scene":"产品介绍","audience":"客户","lang":"zh","prompt":"语气专业，适合演示"}\`)
+  body := []byte(`{"id":"TASK_ID","stream":true,"length":"medium","scene":"产品介绍","audience":"客户","lang":"zh","prompt":"语气专业，适合演示"}`)
   req, _ := http.NewRequest("POST", "https://docmee.cn/api/ppt/v2/generateContent", bytes.NewBuffer(body))
   req.Header.Set("Content-Type", "application/json")
   req.Header.Set("token", "YOUR_TEMP_TOKEN")
@@ -253,8 +316,14 @@ func main() {
 
   data, _ := io.ReadAll(resp.Body)
   fmt.Println(string(data))
-}`}
-  java={`import java.net.URI;
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -285,8 +354,11 @@ public class GenerateContentExample {
 
     System.out.println(response.body());
   }
-}`}
-/>
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
 
 流式响应结束时会返回完整结果。你也可以在拿到初稿后继续调用 [`updateContent`](/api-reference/v2/update-content) 做二次调整。
 
@@ -301,8 +373,11 @@ public class GenerateContentExample {
 
 把任务 ID、模板 ID 和最终 Markdown 内容传给 [`generatePptx`](/api-reference/v2/generate-pptx)。
 
-<ApiCodeTabs
-  node={`const response = await fetch('https://docmee.cn/api/ppt/v2/generatePptx', {
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch('https://docmee.cn/api/ppt/v2/generatePptx', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -316,8 +391,14 @@ public class GenerateContentExample {
 })
 
 const result = await response.json()
-console.log(result)`}
-  python={`import requests
+console.log(result)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
 
 response = requests.post(
     'https://docmee.cn/api/ppt/v2/generatePptx',
@@ -332,8 +413,14 @@ response = requests.post(
     }
 )
 
-print(response.json())`}
-  go={`package main
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
 
 import (
   "bytes"
@@ -343,7 +430,7 @@ import (
 )
 
 func main() {
-  body := []byte(\`{"id":"TASK_ID","templateId":"TEMPLATE_ID","markdown":"# AI 办公趋势\\n## 行业背景\\n### 机会与挑战\\n#### 关键观点\\n- 内容示例"}\`)
+  body := []byte(`{"id":"TASK_ID","templateId":"TEMPLATE_ID","markdown":"# AI 办公趋势\\n## 行业背景\\n### 机会与挑战\\n#### 关键观点\\n- 内容示例"}`)
   req, _ := http.NewRequest("POST", "https://docmee.cn/api/ppt/v2/generatePptx", bytes.NewBuffer(body))
   req.Header.Set("Content-Type", "application/json")
   req.Header.Set("token", "YOUR_TEMP_TOKEN")
@@ -353,8 +440,14 @@ func main() {
 
   data, _ := io.ReadAll(resp.Body)
   fmt.Println(string(data))
-}`}
-  java={`import java.net.URI;
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -381,8 +474,11 @@ public class GeneratePptxExample {
 
     System.out.println(response.body());
   }
-}`}
-/>
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
 
 接口会返回 `pptInfo`，其中包含 PPT ID、封面地址和 PPT 数据结构。
 
@@ -390,8 +486,11 @@ public class GeneratePptxExample {
 
 如果你需要可下载文件，再调用 [`downloadPptx`](/api-reference/ppts/download-pptx)：
 
-<ApiCodeTabs
-  node={`const response = await fetch('https://docmee.cn/api/ppt/downloadPptx', {
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch('https://docmee.cn/api/ppt/downloadPptx', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -401,8 +500,14 @@ public class GeneratePptxExample {
 })
 
 const result = await response.json()
-console.log(result)`}
-  python={`import requests
+console.log(result)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
 
 response = requests.post(
     'https://docmee.cn/api/ppt/downloadPptx',
@@ -413,8 +518,14 @@ response = requests.post(
     json={'id': 'PPT_ID'}
 )
 
-print(response.json())`}
-  go={`package main
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
 
 import (
   "bytes"
@@ -424,7 +535,7 @@ import (
 )
 
 func main() {
-  body := []byte(\`{"id":"PPT_ID"}\`)
+  body := []byte(`{"id":"PPT_ID"}`)
   req, _ := http.NewRequest("POST", "https://docmee.cn/api/ppt/downloadPptx", bytes.NewBuffer(body))
   req.Header.Set("Content-Type", "application/json")
   req.Header.Set("token", "YOUR_TEMP_TOKEN")
@@ -434,8 +545,14 @@ func main() {
 
   data, _ := io.ReadAll(resp.Body)
   fmt.Println(string(data))
-}`}
-  java={`import java.net.URI;
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -456,8 +573,11 @@ public class DownloadPptxExample {
 
     System.out.println(response.body());
   }
-}`}
-/>
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
 
 返回的 `fileUrl` 可直接下载，默认有效期 2 小时。
 

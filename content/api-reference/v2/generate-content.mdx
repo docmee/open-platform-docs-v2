@@ -52,8 +52,11 @@ title: '生成大纲内容'
 
 ## 多语言示例
 
-<ApiCodeTabs
-  node={`const response = await fetch('https://docmee.cn/api/ppt/v2/generateContent', {
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch('https://docmee.cn/api/ppt/v2/generateContent', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -70,8 +73,14 @@ title: '生成大纲内容'
   })
 })
 
-console.log(await response.text())`}
-  python={`import requests
+console.log(await response.text())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
 
 response = requests.post(
     'https://docmee.cn/api/ppt/v2/generateContent',
@@ -90,8 +99,14 @@ response = requests.post(
     }
 )
 
-print(response.text)`}
-  go={`package main
+print(response.text)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
 
 import (
   "bytes"
@@ -101,7 +116,7 @@ import (
 )
 
 func main() {
-  body := []byte(\`{"id":"TASK_ID","stream":true,"length":"medium","scene":"产品介绍","audience":"客户","lang":"zh","prompt":"语气专业，适合演示"}\`)
+  body := []byte(`{"id":"TASK_ID","stream":true,"length":"medium","scene":"产品介绍","audience":"客户","lang":"zh","prompt":"语气专业，适合演示"}`)
   req, _ := http.NewRequest("POST", "https://docmee.cn/api/ppt/v2/generateContent", bytes.NewBuffer(body))
   req.Header.Set("Content-Type", "application/json")
   req.Header.Set("token", "YOUR_TEMP_TOKEN")
@@ -110,8 +125,14 @@ func main() {
   defer resp.Body.Close()
   data, _ := io.ReadAll(resp.Body)
   fmt.Println(string(data))
-}`}
-  java={`import java.net.URI;
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -142,5 +163,8 @@ public class GenerateContentExample {
 
     System.out.println(response.body());
   }
-}`}
-/>
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>

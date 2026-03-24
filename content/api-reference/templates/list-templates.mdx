@@ -41,8 +41,11 @@ title: '分页查询模板'
 
 ## 多语言示例
 
-<ApiCodeTabs
-  node={`const response = await fetch('https://docmee.cn/api/ppt/templates', {
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch('https://docmee.cn/api/ppt/templates', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -60,8 +63,14 @@ title: '分页查询模板'
   })
 })
 
-console.log(await response.json())`}
-  python={`import requests
+console.log(await response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
 
 response = requests.post(
     'https://docmee.cn/api/ppt/templates',
@@ -81,8 +90,14 @@ response = requests.post(
     }
 )
 
-print(response.json())`}
-  go={`package main
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
 
 import (
   "bytes"
@@ -92,7 +107,7 @@ import (
 )
 
 func main() {
-  body := []byte(\`{"page":1,"size":10,"filters":{"type":1,"category":null,"style":null,"themeColor":null}}\`)
+  body := []byte(`{"page":1,"size":10,"filters":{"type":1,"category":null,"style":null,"themeColor":null}}`)
   req, _ := http.NewRequest("POST", "https://docmee.cn/api/ppt/templates", bytes.NewBuffer(body))
   req.Header.Set("Content-Type", "application/json")
   req.Header.Set("token", "YOUR_TEMP_TOKEN")
@@ -101,8 +116,14 @@ func main() {
   defer resp.Body.Close()
   data, _ := io.ReadAll(resp.Body)
   fmt.Println(string(data))
-}`}
-  java={`import java.net.URI;
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -134,5 +155,8 @@ public class ListTemplatesExample {
 
     System.out.println(response.body());
   }
-}`}
-/>
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
