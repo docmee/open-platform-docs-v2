@@ -49,4 +49,17 @@ describe('docs center structure', () => {
     const packageText = readFileSync('package.json', 'utf8')
     expect(packageText).not.toContain('"shiki"')
   })
+
+  it('uses redesigned homepage sections', () => {
+    const homeText = readFileSync('content/index.mdx', 'utf8')
+    expect(homeText).toContain('HomeHero')
+    expect(homeText).toContain('HomeCardGrid')
+    expect(homeText).toContain('HomeFlow')
+    expect(homeText).toContain('HomeReadingPaths')
+
+    expect(existsSync('components/mdx/HomeHero.tsx')).toBe(true)
+    expect(existsSync('components/mdx/HomeCardGrid.tsx')).toBe(true)
+    expect(existsSync('components/mdx/HomeFlow.tsx')).toBe(true)
+    expect(existsSync('components/mdx/HomeReadingPaths.tsx')).toBe(true)
+  })
 })
