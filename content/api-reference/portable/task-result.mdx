@@ -1,0 +1,191 @@
+---
+title: '查询便携版结果'
+---
+
+# 查询便携版结果
+
+## 接口信息
+
+- 方法：`POST`
+- 路径：`https://open.docmee.cn/v2/api/ppt/portable/taskResult`
+- 鉴权：请求头传 `token`
+- 请求体：`application/json`
+
+## 接口作用
+
+查询便携版任务的当前执行状态与最终结果。适用于以下场景：
+
+- 创建任务时使用了 `stream=false`
+- SSE 连接中断后恢复结果查询
+- 业务侧需要主动轮询任务进度
+
+## 请求参数
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `taskId` | `string` | 是 | 创建便携版任务后返回的任务 ID |
+
+## 返回字段
+
+| 字段 | 说明 |
+| --- | --- |
+| `taskId` | 任务 ID |
+| `status` | 任务状态：`pending`、`processing`、`success`、`failed` |
+| `progress` | 当前进度，可选 |
+| `step` | 当前执行阶段，可选 |
+| `pptId` | 成功时返回 |
+| `fileUrl` | 成功时返回，PPT 下载地址 |
+| `coverUrl` | 成功时返回，封面图地址 |
+| `previewUrl` | 成功时返回，预览地址 |
+| `errorCode` | 失败时返回 |
+| `errorMessage` | 失败时返回 |
+
+## 多语言示例
+
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch('https://open.docmee.cn/v2/api/ppt/portable/taskResult', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    token: 'YOUR_TEMP_TOKEN'
+  },
+  body: JSON.stringify({
+    taskId: 'PORTABLE_TASK_ID'
+  })
+})
+
+console.log(await response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
+
+response = requests.post(
+    'https://open.docmee.cn/v2/api/ppt/portable/taskResult',
+    headers={
+        'Content-Type': 'application/json',
+        'token': 'YOUR_TEMP_TOKEN'
+    },
+    json={
+        'taskId': 'PORTABLE_TASK_ID'
+    }
+)
+
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
+
+import (
+  "bytes"
+  "fmt"
+  "io"
+  "net/http"
+)
+
+func main() {
+  body := []byte(`{"taskId":"PORTABLE_TASK_ID"}`)
+  req, _ := http.NewRequest("POST", "https://open.docmee.cn/v2/api/ppt/portable/taskResult", bytes.NewBuffer(body))
+  req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("token", "YOUR_TEMP_TOKEN")
+
+  resp, _ := http.DefaultClient.Do(req)
+  defer resp.Body.Close()
+
+  data, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(data))
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class PortableTaskResultExample {
+  public static void main(String[] args) throws Exception {
+    String body = """
+      {
+        "taskId": "PORTABLE_TASK_ID"
+      }
+      """;
+
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create("https://open.docmee.cn/v2/api/ppt/portable/taskResult"))
+      .header("Content-Type", "application/json")
+      .header("token", "YOUR_TEMP_TOKEN")
+      .POST(HttpRequest.BodyPublishers.ofString(body))
+      .build();
+
+    HttpResponse<String> response = HttpClient.newHttpClient()
+      .send(request, HttpResponse.BodyHandlers.ofString());
+
+    System.out.println(response.body());
+  }
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
+
+## 响应示例
+
+处理中：
+
+```json
+{
+  "code": 0,
+  "data": {
+    "taskId": "PORTABLE_TASK_ID",
+    "status": "processing",
+    "progress": 65,
+    "step": "generate_ppt"
+  }
+}
+```
+
+成功：
+
+```json
+{
+  "code": 0,
+  "data": {
+    "taskId": "PORTABLE_TASK_ID",
+    "status": "success",
+    "progress": 100,
+    "step": "completed",
+    "pptId": "PPT_ID",
+    "fileUrl": "https://example.com/demo.pptx",
+    "coverUrl": "https://example.com/cover.png",
+    "previewUrl": "https://example.com/preview"
+  }
+}
+```
+
+失败：
+
+```json
+{
+  "code": 5001,
+  "data": {
+    "taskId": "PORTABLE_TASK_ID",
+    "status": "failed",
+    "errorCode": "TASK_FAILED",
+    "errorMessage": "generate ppt failed"
+  }
+}
+```

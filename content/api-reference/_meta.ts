@@ -11,6 +11,10 @@ const meta: MetaRecord = {
     title: 'V2 生成流程',
     // type: 'page'
   },
+  portable: {
+    title: '便携版接口',
+    // type: 'page'
+  },
   v1: {
     title: 'V1 兼容接口',
     // type: 'page'
