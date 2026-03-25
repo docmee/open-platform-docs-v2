@@ -4,7 +4,7 @@ html:root {
   --font-sans: "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", "SF Mono", Consolas, monospace;
   --docs-bg: #fdfdfd;
-  --docs-surface: rgba(255, 255, 255, 0.82);
+  --docs-surface: rgba(245, 245, 245, 0.82);
   --docs-surface-strong: #ffffff;
   --docs-text: #181427;
   --docs-text-soft: #5f5976;
@@ -285,29 +285,63 @@ pre code.nextra-code:not([class*='twoslash-']) {
 }
 
 table {
-  /* width: 100%; */
-  /* width: fit-content; */
   overflow: hidden;
   border-collapse: separate;
   border-spacing: 0;
-  /* border: 1px solid var(--docs-border); */
-  /* border-radius: var(--docs-radius-md); */
-  /* background: rgba(255, 255, 255, 0.72); */
+
+  thead {
+    background: var(--docs-surface);
+
+    th:first-child {
+      border-top-left-radius: var(--docs-radius-sm);
+    }
+
+    th:last-child {
+      border-top-right-radius: var(--docs-radius-sm);
+    }
+  }
+
+  tbody {
+    tr:nth-of-type(odd) {
+      background: var(--docs-bg);
+    }
+
+    tr:nth-of-type(even) {
+      background: var(--docs-surface);
+    }
+
+    tr:last-of-type {
+      td:first-child {
+        border-bottom-left-radius: var(--docs-radius-sm);
+      }
+
+      td:last-child {
+        border-bottom-right-radius: var(--docs-radius-sm);
+      }
+    }
+
+    tr {
+      transition: background 0.5s cubic-bezier(.29, 1, .84, 1);
+
+      &:hover {
+        transition: background 0.18s ease-out;
+        background: hsl(var(--nextra-primary-hue) var(--nextra-primary-saturation) var(--nextra-primary-lightness) / 0.1) !important;
+      }
+    }
+  }
+
+
+  th,
+  td {
+    border-color: rgba(103, 80, 164, 0.1) !important;
+    border-width: 0.5px 0.5px 0.5px 0.5px;
+    padding: 0.9rem 1rem !important;
+  }
+
+
+
 }
 
-/* .dark table {
-  background: rgba(22, 22, 22, 0.72);
-} */
-
-thead {
-  background: rgba(109, 87, 216, 0.06);
-}
-
-th,
-td {
-  border-color: rgba(103, 80, 164, 0.1) !important;
-  padding: 0.9rem 1rem !important;
-}
 
 .home-hero {
   position: relative;

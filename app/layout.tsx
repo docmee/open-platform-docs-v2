@@ -66,15 +66,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </div>
         <div className="site-shell">
           <div
-            className="fixed -bottom-40 -right-24 size-[65vh] opacity-15  bg-accent/50 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)]"
+            className="fixed -bottom-40 -right-24 size-[65vh] opacity-15  bg-accent/50 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)] pointer-events-none"
             aria-hidden="true"
           />
           <div
-            className="fixed -top-[10vh] -left-[30vh] size-[55vh] opacity-15  bg-accent/50 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)]"
+            className="fixed -top-[10vh] -left-[30vh] size-[55vh] opacity-15  bg-accent/50 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)] pointer-events-none"
             aria-hidden="true"
           />
           <div
-            className="fixed top-0 -right-[30vh] size-[45vh]  bg-sky-400/10 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)]"
+            className="fixed top-0 -right-[30vh] size-[45vh]  bg-sky-400/10 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)] pointer-events-none"
             aria-hidden="true"
           />
 
@@ -87,7 +87,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             pageMap={await getPageMap('')}
             footer={footer}
           >
-            <main className="nextra-article-main">{children}</main>
+            <main className="nextra-article-main relative z-10">{children}</main>
           </Layout>
         </div>
       </body>
