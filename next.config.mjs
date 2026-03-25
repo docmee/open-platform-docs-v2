@@ -1,7 +1,20 @@
 import nextra from 'nextra'
 
 const withNextra = nextra({
+  defaultShowCopyCode: true,
+  codeHighlight: true,
   readingTime: true,
+  mdxOptions: {
+    rehypePrettyCodeOptions: {
+      bypassInlineCode: true,
+      // keepBackground: true,
+      // theme: 'night-owl',
+      theme: {
+        light: 'night-owl-light',
+        dark: 'night-owl',
+      },
+    },
+  },
 })
 
 export default withNextra({

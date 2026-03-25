@@ -1,4 +1,7 @@
+import { DotPattern } from '@/components/ui/dot-pattern'
+import { cn } from '@/lib/utils'
 import type { Metadata } from 'next'
+import { Geist } from 'next/font/google'
 import Image from 'next/image'
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import 'nextra-theme-docs/style.css'
@@ -6,29 +9,34 @@ import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import './global.css'
 
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
+
 export const metadata: Metadata = {
   title: {
     default: '文多多AiPPT 开放平台文档',
-    template: '%s | 文多多AiPPT 开放平台文档'
+    template: '%s | 文多多AiPPT 开放平台文档',
   },
-  description: '文多多AiPPT 开放平台文档中心，涵盖快速开始、开发指南与 API 参考。'
+  description: '文多多AiPPT 开放平台文档中心，涵盖快速开始、开发指南与 API 参考。',
 }
 
 const navbar = (
   <Navbar
     logo={
-      <div className="brand-mark">
-        <div className="brand-mark-icon">
+      <div className="flex items-center gap-3">
+        <div className="size-8 rounded-xl overflow-hidden shadow-md shadow-accent/60 ring-2 ring-accent">
           <Image
             src="https://oss.docmee.cn/static/open/open-platform-logo.png"
-            alt="DocMee"
+            alt="docmee open platform"
             width={40}
             height={40}
           />
         </div>
-        <div className="brand-mark-copy">
-          <span>DocMee</span>
+        <div className="flex items-center gap-2">
           <strong>开放平台文档</strong>
+          <div className="text-accent font-bold scale-75 origin-left bg-muted ring ring-accent/80 uppercase text-xs rounded-full px-2 py-0.5 flex items-center gap-1">
+            <div className="size-1.5 bg-accent rounded-full" />
+            docmee
+          </div>
         </div>
       </div>
     }
@@ -36,30 +44,50 @@ const navbar = (
 )
 
 const footer = (
-  <Footer>
-    <div className="site-footer">
-      <span>DocMee Open Platform Docs</span>
-      <span>{new Date().getFullYear()} © 文多多 AiPPT</span>
+  <Footer className="bg-slate-900 m-0! w-full! max-w-svw! text-slate-100!">
+    <div className="flex justify-center items-center size-full text-xs">
+      {/* <span>文多多AiPPT 开放平台文档</span> */}
+      <span>© 2023-{new Date().getFullYear()} 文多多 AiPPT</span>
     </div>
   </Footer>
 )
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-CN" dir="ltr" suppressHydrationWarning>
+    <html lang="zh-CN" dir="ltr" suppressHydrationWarning className={cn('font-sans', geist.variable)}>
       <Head />
       <body>
+        <div className="w-full absolute h-[65vh] top-0 left-0">
+          <DotPattern
+            width={14}
+            height={14}
+            className={cn('mask-[radial-gradient(ellipse_at_top_center,white_10%,transparent_80%)] opacity-50')}
+          />
+        </div>
         <div className="site-shell">
-          <div className="site-shell-gradient site-shell-gradient-top" aria-hidden="true" />
-          <div className="site-shell-gradient site-shell-gradient-bottom" aria-hidden="true" />
+          <div
+            className="fixed -bottom-40 -right-24 size-[65vh] opacity-15  bg-accent/50 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)]"
+            aria-hidden="true"
+          />
+          <div
+            className="fixed -top-[10vh] -left-[30vh] size-[55vh] opacity-15  bg-accent/50 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)]"
+            aria-hidden="true"
+          />
+          <div
+            className="fixed top-0 -right-[30vh] size-[45vh]  bg-sky-400/10 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)]"
+            aria-hidden="true"
+          />
+
           <Layout
             navbar={navbar}
             feedback={{ content: null, labels: undefined }}
             editLink={null}
+            copyPageButton={true}
+            toc={{ title: '目录', float: true }}
             pageMap={await getPageMap('')}
             footer={footer}
           >
-            {children}
+            <main className="nextra-article-main">{children}</main>
           </Layout>
         </div>
       </body>

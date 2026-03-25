@@ -1,6 +1,6 @@
+import ApiCodeTabs, { ApiCodeTab } from '@/components/mdx/ApiCodeTabs'
 import { useMDXComponents as getThemeComponents } from 'nextra-theme-docs'; // nextra-theme-blog or your custom theme
 import { MDXComponents } from 'nextra/mdx-components'
-import ApiCodeTabs, { ApiCodeTab } from '@/components/mdx/ApiCodeTabs'
 
 // Get the default MDX components
 const themeComponents = getThemeComponents()
@@ -9,8 +9,8 @@ const themeComponents = getThemeComponents()
 export function useMDXComponents(components?: MDXComponents) {
   return {
     ...themeComponents,
+    ...components,
     ApiCodeTabs,
     ApiCodeTab,
-    ...components
   }
 }
