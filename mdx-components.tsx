@@ -2,6 +2,7 @@ import ApiCodeTabs, { ApiCodeTab } from '@/components/mdx/ApiCodeTabs'
 import HttpMethodBadge from '@/components/mdx/HttpMethodBadge'
 import ImportantNote from '@/components/mdx/ImportantNote'
 import InlineCode from '@/components/mdx/InlineCode'
+import { Callout } from 'nextra/components'
 import { useMDXComponents as getThemeComponents } from 'nextra-theme-docs'; // nextra-theme-blog or your custom theme
 import { MDXComponents } from 'nextra/mdx-components'
 
@@ -15,6 +16,7 @@ export function useMDXComponents(components?: MDXComponents) {
     ...components,
     ApiCodeTabs,
     ApiCodeTab,
+    Callout,
     InlineCode,
     HttpMethodBadge,
     ImportantNote,

@@ -1,0 +1,236 @@
+---
+title: 'HTML 转 PPTX'
+---
+
+# HTML 转 PPTX
+
+将多个 HTML 页面字符串按顺序组合，转换为一个可下载的 PPTX 文件。
+
+## 能力说明
+
+- 请求体中的 <InlineCode>htmls</InlineCode> 接收一组 HTML 页面字符串，类型为 <InlineCode>string[]</InlineCode>。
+- 服务端会按 <InlineCode>htmls</InlineCode> 的输入顺序生成 PPT 页顺序。
+- 接口返回的不是文件二进制流，而是一个带有效期的下载地址。
+- 只要至少成功生成 1 页并产出文件，接口顶层仍返回 <InlineCode>code = 0</InlineCode>。
+
+## 适用场景
+
+- 将业务系统中已经渲染完成的报告页面导出为 PPT。
+- 将 H5 或可视化页面按页归档为演示文稿。
+- 将服务端批量生成的 HTML 页面组合为标准 PPTX 交付文件。
+
+## 重要说明
+
+<ImportantNote title="重要说明">
+  <p>
+    响应中的 <InlineCode>fileUrl</InlineCode> 是临时 OSS 下载地址，存在失效时间，请在 <InlineCode>expireAt</InlineCode> 前尽快下载并转存。
+  </p>
+  <p>
+    平台不承诺长期保存结果文件，生产接入时应自行做持久化存储。
+  </p>
+  <p>
+    单页转换失败不一定导致整体失败。失败页是保留为空白页还是直接跳过，由 <InlineCode>pageErrorMode</InlineCode> 决定。
+  </p>
+</ImportantNote>
+
+## 输入要求
+
+- 每个 HTML 都必须包含一个 <InlineCode>.slide</InlineCode> 根元素，系统按该元素识别单页内容。
+- 同一次请求中的所有 HTML 页面必须是同一尺寸，否则尺寸不一致的页面会被判定为失败页。
+- <InlineCode>htmls</InlineCode> 数组顺序就是最终 PPT 的页顺序。
+- <InlineCode>pageErrorMode</InlineCode> 可选值只有 <InlineCode>blank</InlineCode> 和 <InlineCode>skip</InlineCode>，默认值为 <InlineCode>blank</InlineCode>。
+- <InlineCode>blank</InlineCode> 表示失败页在结果文件中保留为空白页，<InlineCode>skip</InlineCode> 表示失败页直接跳过。
+
+## 接口信息
+
+- 方法：<HttpMethodBadge method="POST" />
+- 路径：<InlineCode value="https://open.docmee.cn/v2/api/htmljson-bridge/convert-html-to-json">https://open.docmee.cn/v2/api/htmljson-bridge/convert-html-to-json</InlineCode>
+- 鉴权：请求头传 <InlineCode>token</InlineCode>
+- 请求体：<InlineCode>application/json</InlineCode>
+
+该接口沿用现有对外路径命名。虽然路径中包含 <InlineCode>json</InlineCode>，实际能力是将 HTML 页面数组转换并组合为 PPTX 文件。
+
+## 请求示例
+
+```bash
+curl --request POST \
+  --url https://open.docmee.cn/v2/api/htmljson-bridge/convert-html-to-json \
+  --header "Content-Type: application/json" \
+  --header "token: YOUR_TEMP_TOKEN" \
+  --data '{
+    "htmls": [
+      "<div class=\"slide\" style=\"width:1280px;height:720px\"><h1>第一页</h1></div>",
+      "<div class=\"slide\" style=\"width:1280px;height:720px\"><h1>第二页</h1></div>"
+    ],
+    "pageErrorMode": "blank"
+  }'
+```
+
+## 请求参数
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `htmls` | `string[]` | 是 | `["<div class=\"slide\">...</div>"]` | 待转换的 HTML 页面数组。每个元素必须是字符串，数组顺序即最终 PPT 页顺序。 |
+| `pageErrorMode` | `string` | 否 | `blank` | 单页失败处理策略。仅支持 `blank` 和 `skip`，默认 `blank`。 |
+
+请求级参数错误会直接返回 <InlineCode>40010</InlineCode>，典型场景包括：
+
+- 请求体不是合法 JSON。
+- <InlineCode>htmls</InlineCode> 缺失、不是数组或数组为空。
+- <InlineCode>htmls</InlineCode> 中存在非字符串元素。
+- <InlineCode>pageErrorMode</InlineCode> 不是 <InlineCode>blank</InlineCode> 或 <InlineCode>skip</InlineCode>。
+
+## 响应设计
+
+### 完全成功
+
+所有页面都成功时，接口返回 <InlineCode>code = 0</InlineCode>，并提供下载地址、过期时间和统计信息。
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "fileUrl": "https://oss-example/docmee/result.pptx?Expires=1774955400&Signature=xxx",
+    "expireAt": "2026-03-31T16:30:00Z",
+    "totalPages": 5,
+    "successPages": 5,
+    "failedPages": 0,
+    "pageErrorMode": "blank",
+    "failedPageDetails": []
+  }
+}
+```
+
+### 部分成功
+
+只要至少有 1 页成功并产出 PPTX，接口顶层仍返回 <InlineCode>code = 0</InlineCode>。失败页通过 <InlineCode>failedPageDetails</InlineCode> 返回。
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "fileUrl": "https://oss-example/docmee/result.pptx?Expires=1774955400&Signature=xxx",
+    "expireAt": "2026-03-31T16:30:00Z",
+    "totalPages": 5,
+    "successPages": 3,
+    "failedPages": 2,
+    "pageErrorMode": "blank",
+    "failedPageDetails": [
+      {
+        "index": 2,
+        "code": 50101,
+        "reason": "HTML 中未找到 .slide 根元素",
+        "finalAction": "blank"
+      },
+      {
+        "index": 4,
+        "code": 50102,
+        "reason": "该页面尺寸与其他页面不一致",
+        "finalAction": "blank"
+      }
+    ]
+  }
+}
+```
+
+默认情况下：
+
+- <InlineCode>50101</InlineCode> 表示页级内容不满足转换要求，例如未找到 <InlineCode>.slide</InlineCode> 根元素。
+- <InlineCode>50102</InlineCode> 表示页级渲染或页面约束失败，例如页面尺寸不一致。
+- <InlineCode>failedPageDetails[].index</InlineCode> 使用 1-based 索引，第一条 HTML 对应 <InlineCode>index = 1</InlineCode>。
+
+### 整体失败
+
+请求级错误或服务端无法产出结果文件时，接口返回非零顶层错误码。
+
+参数错误：
+
+```json
+{
+  "code": 40010,
+  "message": "invalid request parameters",
+  "data": {
+    "requestId": "req_20260331_xxx",
+    "errorDetails": [
+      {
+        "field": "htmls",
+        "reason": "htmls must not be empty"
+      }
+    ]
+  }
+}
+```
+
+全部页面失败，未生成文件：
+
+```json
+{
+  "code": 50103,
+  "message": "all pages failed",
+  "data": {
+    "requestId": "req_20260331_xxx",
+    "errorDetails": [
+      {
+        "field": "htmls[2]",
+        "reason": "HTML 中未找到 .slide 根元素"
+      },
+      {
+        "field": "htmls[4]",
+        "reason": "该页面尺寸与其他页面不一致"
+      }
+    ]
+  }
+}
+```
+
+服务内部程序异常：
+
+```json
+{
+  "code": 50199,
+  "message": "internal program error",
+  "data": {
+    "requestId": "req_20260331_xxx"
+  }
+}
+```
+
+响应字段说明：
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 顶层结果码。完全成功和部分成功都返回 `0`。 |
+| `message` | `string` | `success` | 响应说明文本。 |
+| `data` | `object \| null` | `{"fileUrl":"https://..."}` | 成功或部分成功时返回结果对象；整体失败时通常为 `null`。 |
+| `data.requestId` | `string` | `req_20260331_xxx` | 建议业务记录的请求标识，便于排查整体失败。 |
+| `data.fileUrl` | `string` | `https://oss-example/docmee/result.pptx?...` | PPTX 临时下载地址。 |
+| `data.expireAt` | `string` | `2026-03-31T16:30:00Z` | 下载地址失效时间。 |
+| `data.totalPages` | `number` | `5` | 本次请求接收的 HTML 页总数。 |
+| `data.successPages` | `number` | `3` | 成功转换的页数。 |
+| `data.failedPages` | `number` | `2` | 失败页数。 |
+| `data.pageErrorMode` | `string` | `blank` | 本次请求实际生效的单页失败处理策略。 |
+| `data.failedPageDetails` | `object[]` | `[{"index":2,"code":50101}]` | 失败页详情列表。无失败时为空数组。 |
+| `data.failedPageDetails[].index` | `number` | `2` | 失败页索引，按 1-based 计数。 |
+| `data.failedPageDetails[].code` | `number` | `50101` | 页级失败分类码，默认使用 `50101` 或 `50102`。 |
+| `data.failedPageDetails[].reason` | `string` | `HTML 中未找到 .slide 根元素` | 失败原因说明，适合日志和告警。 |
+| `data.failedPageDetails[].finalAction` | `string` | `blank` | 该失败页在结果文件中的处理动作，取值为 `blank` 或 `skip`。 |
+| `data.errorDetails[]` | `object[]` | `[{"field":"htmls","reason":"htmls must not be empty"}]` | 整体失败时的错误明细。 |
+
+## 错误码说明
+
+| 错误码 | 层级 | 说明 |
+| --- | --- | --- |
+| `40010` | 请求级 | 请求体结构或字段值不合法，例如 `htmls` 为空、元素类型错误、`pageErrorMode` 非法。 |
+| `50101` | 页级 | 页面内容不满足转换要求的默认分类，例如缺少 `.slide` 根元素。 |
+| `50102` | 页级 | 页面约束或渲染失败的默认分类，例如页面尺寸不一致。 |
+| `50103` | 顶层程序错误 | 所有页面都失败，最终未生成可下载文件。 |
+| `50199` | 顶层程序错误 | 服务内部程序异常，无法完成本次转换。 |
+
+## 接入建议
+
+- 收到 <InlineCode>fileUrl</InlineCode> 后立即下载或转存到自有对象存储，不要依赖平台长期保留。
+- 即使顶层返回 <InlineCode>code = 0</InlineCode>，也要检查 <InlineCode>failedPageDetails</InlineCode>，区分完全成功和部分成功。
+- 在业务侧记录失败页索引、失败码和失败原因，用于按页重试、人工排查或告警。
+- 如果业务要求页数严格一致，建议在 <InlineCode>pageErrorMode = blank</InlineCode> 下接入，并结合失败页明细做补偿处理。

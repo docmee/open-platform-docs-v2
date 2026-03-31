@@ -29,6 +29,40 @@ describe('docs center structure', () => {
     expect(metaText).toContain("title: 'API 参考'")
   })
 
+  it('registers the open capabilities top-level navigation entry', () => {
+    expect(existsSync('content/_meta.tsx')).toBe(true)
+
+    const rootMetaText = readFileSync('content/_meta.tsx', 'utf8')
+    expect(rootMetaText).toContain("'open-capabilities':")
+    expect(rootMetaText).toContain("title: '开放能力'")
+  })
+
+  it('includes the open capabilities structure files', () => {
+    expect(existsSync('content/open-capabilities/_meta.ts')).toBe(true)
+    expect(existsSync('content/open-capabilities/html-to-pptx.mdx')).toBe(true)
+  })
+
+  it('documents the html-to-pptx open capability page content', () => {
+    expect(existsSync('content/open-capabilities/_meta.ts')).toBe(true)
+    expect(existsSync('content/open-capabilities/html-to-pptx.mdx')).toBe(true)
+
+    const openCapabilitiesMetaText = readFileSync(
+      'content/open-capabilities/_meta.ts',
+      'utf8'
+    )
+    expect(openCapabilitiesMetaText).toContain("'html-to-pptx': 'HTML 转 PPTX'")
+
+    const pageText = readFileSync(
+      'content/open-capabilities/html-to-pptx.mdx',
+      'utf8'
+    )
+    expect(pageText).toContain('# HTML 转 PPTX')
+    expect(pageText).toContain('/v2/api/htmljson-bridge/convert-html-to-json')
+    expect(pageText).toContain('pageErrorMode')
+    expect(pageText).toContain('40010')
+    expect(pageText).toContain('50103')
+  })
+
   it('supports multi-language API code examples with ApiCodeTabs and code fences', () => {
     expect(existsSync('components/mdx/ApiCodeTabs.tsx')).toBe(true)
 
@@ -51,6 +85,7 @@ describe('docs center structure', () => {
     expect(existsSync('components/mdx/ImportantNote.tsx')).toBe(true)
 
     const mdxComponentsText = readFileSync('mdx-components.tsx', 'utf8')
+    expect(mdxComponentsText).toContain('Callout')
     expect(mdxComponentsText).toContain('InlineCode')
     expect(mdxComponentsText).toContain('HttpMethodBadge')
     expect(mdxComponentsText).toContain('ImportantNote')

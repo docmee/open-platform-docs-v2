@@ -17,6 +17,10 @@ const meta: MetaRecord = {
     title: 'API 参考',
     type: 'page',
   },
+  'open-capabilities': {
+    title: '开放能力',
+    type: 'page',
+  },
 
   'pricing': {
     title: '定价',
