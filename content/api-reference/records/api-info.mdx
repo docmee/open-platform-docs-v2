@@ -6,15 +6,53 @@ title: '查询 API 信息'
 
 ## 接口信息
 
-- 方法：`GET`
-- 路径：`/api/user/apiInfo`
+- 方法：<HttpMethodBadge method="GET" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/user/apiInfo">https://open.docmee.cn/api/user/apiInfo</InlineCode>
 - 鉴权：请求头传 `Api-Key`
 
 ## 接口作用
 
 查询当前账号的可用积分和已用积分。
 
+
+## 请求示例
+
+```bash
+curl --request GET \
+  --url "https://open.docmee.cn/api/user/apiInfo" \
+  --header "Api-Key: YOUR_API_KEY"
+```
+
+## 请求参数
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `无` | `-` | 否 | `-` | 该接口没有业务请求参数，只需要在请求头中携带 `Api-Key`。 |
+
 ## 返回字段
 
 - `availableCount`：可用次数
 - `usedCount`：已使用次数
+
+
+## 响应示例
+
+```json
+{
+  "code": 0,
+  "message": "操作成功",
+  "data": {
+    "availableCount": "VALUE",
+    "usedCount": "VALUE"
+  }
+}
+```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 通用响应状态码，0 表示成功。 |
+| `message` | `string` | `操作成功` | 服务端返回的结果说明。 |
+| `availableCount` | `number` | `VALUE` | 统计数量或剩余次数。 |
+| `usedCount` | `number` | `VALUE` | 统计数量或剩余次数。 |

@@ -63,3 +63,98 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
+
+.api-method {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4.5rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.api-method-post {
+  color: #8f2400;
+  background: #ffdfcf;
+  border-color: #ffb58f;
+}
+
+.api-method-get {
+  color: #0a5c54;
+  background: #d9f7f1;
+  border-color: #8dd9cb;
+}
+
+.api-method-put {
+  color: #694c00;
+  background: #fff1c7;
+  border-color: #f4d476;
+}
+
+.api-method-delete {
+  color: #88273d;
+  background: #ffd9e1;
+  border-color: #f2a5b6;
+}
+
+.api-inline-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.1rem 0.45rem;
+  margin: 0 0.1rem;
+  border: 1px solid hsl(var(--nextra-primary-hue) var(--nextra-primary-saturation) var(--nextra-primary-lightness) / 0.3);
+  border-radius: 0.55rem;
+  /* background: #f8f3ff; */
+  color: hsl(var(--nextra-primary-hue) var(--nextra-primary-saturation) var(--nextra-primary-lightness));
+  font: inherit;
+  line-height: 1.45;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.api-inline-code code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: 0.92em;
+}
+
+.api-inline-code:hover {
+  background: hsl(var(--nextra-primary-hue) var(--nextra-primary-saturation) var(--nextra-primary-lightness) / 0.1);
+  border-color: hsl(var(--nextra-primary-hue) var(--nextra-primary-saturation) var(--nextra-primary-lightness) / 0.3);
+}
+
+.api-inline-code[data-copied='true'] {
+  background: hsl(var(--nextra-success-hue) var(--nextra-success-saturation) var(--nextra-success-lightness) / 0.1);
+  border-color: hsl(var(--nextra-success-hue) var(--nextra-success-saturation) var(--nextra-success-lightness) / 0.3);
+  color: hsl(var(--nextra-success-hue) var(--nextra-success-saturation) var(--nextra-success-lightness));
+}
+
+.api-important-note {
+  margin: 1.25rem 0;
+  padding: 1rem 1.1rem;
+  border-left: 4px solid #f28b37;
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, #fff8ef 0%, #fff3dc 100%);
+  color: #5e3a0d;
+}
+
+.api-important-note-title {
+  margin: 0 0 0.45rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.api-important-note-body> :first-child {
+  margin-top: 0;
+}
+
+.api-important-note-body> :last-child {
+  margin-bottom: 0;
+}

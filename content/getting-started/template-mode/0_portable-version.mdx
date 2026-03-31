@@ -68,6 +68,9 @@ token: YOUR_TEMP_TOKEN
 
 便携版的参数设计以 [`createTask`](/api-reference/v2/create-task) 和 [`generateContent`](/api-reference/v2/generate-content) 的已有能力为基础，只保留上层封装真正需要的字段。
 
+
+
+
 | 参数 | 类型 | 必填 | 来源 | 说明 |
 | --- | --- | --- | --- | --- |
 | `type` | `1-7` |✅| [`createTask`](/api-reference/v2/create-task) | 任务类型。`1` 智能生成；`2` 上传文件；`3` 思维导图；`4` Word 精准转 PPT；`5` 网页链接；`6` 粘贴文本；`7` Markdown 大纲 |
@@ -80,6 +83,13 @@ token: YOUR_TEMP_TOKEN
 | `audience` | `string` | ❌ | [`generateContent`](/api-reference/v2/generate-content) | 受众类型，例如“客户” |
 | `lang` | `string` | ❌ | [`generateContent`](/api-reference/v2/generate-content) | 输出语言，例如 `zh`、`en` |
 | `prompt` | `string` | ❌ | [`generateContent`](/api-reference/v2/generate-content) | 附加要求，建议保持简短 |
+| `useAgent` | `boolean` | ❌ | - | 是否使用智能体生成，默认 `false` |
+
+`useAgent` 仅在任务类型为 `1` 时生效，其他任务类型会忽略该字段。
+
+`useAgent` 为 `true` 时，会使用智能体（智能体会自行思考、搜索、总结）生成内容。
+
+
 
 ### 参数说明
 

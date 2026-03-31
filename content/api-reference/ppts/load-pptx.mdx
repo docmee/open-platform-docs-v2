@@ -6,18 +6,63 @@ title: '加载 PPT 数据'
 
 ## 接口信息
 
-- 方法：`GET`
-- 路径：`/api/ppt/loadPptx?id=`
-- 鉴权：请求头传 `token`
+- 方法：<HttpMethodBadge method="GET" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/ppt/loadPptx?id=PPT_ID">https://open.docmee.cn/api/ppt/loadPptx?id=PPT_ID</InlineCode>
+- 鉴权：请求头传 <InlineCode>token</InlineCode>
 
 ## 接口作用
 
-获取单个 PPT 的完整结构数据，适合在编辑器或管理后台中继续加载和展示。
+获取单个 PPT 的完整结构数据，适合在编辑器、管理后台或预览服务中继续加载和展示。
+
+<ImportantNote title="重要信息">
+  <p>
+    该接口会返回较完整的 <InlineCode>pptInfo</InlineCode> 数据。若只是想拿下载地址，应优先使用 <InlineCode>downloadPptx</InlineCode>；
+    若只是想回显 Markdown 内容，应优先使用 <InlineCode>loadPptxMarkdown</InlineCode>。
+  </p>
+</ImportantNote>
+
+## 请求示例
+
+```bash
+curl --request GET \
+  --url "https://open.docmee.cn/api/ppt/loadPptx?id=PPT_ID" \
+  --header "token: YOUR_TEMP_TOKEN"
+```
 
 ## 请求参数
 
-- `id`：PPT ID
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `id` | `string` | 是 | `ppt_xxx` | 需要加载的 PPT ID。 |
 
-## 响应说明
+## 响应示例
 
-返回 `pptInfo`，结构与生成 PPT 接口中的 `pptInfo` 基本一致，通常包含 `coverUrl`、`templateId`、`pptxProperty` 等字段。
+```json
+{
+  "code": 0,
+  "message": "操作成功",
+  "data": {
+    "pptInfo": {
+      "id": "ppt_xxx",
+      "subject": "AI 办公趋势",
+      "coverUrl": "https://example.com/cover.png",
+      "templateId": "template_xxx",
+      "pptxProperty": "base64-gzip-json"
+    }
+  }
+}
+```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 通用响应状态码，`0` 表示成功。 |
+| `message` | `string` | `操作成功` | 响应说明文本。 |
+| `data` | `object` | `{"pptInfo":{...}}` | 返回的业务数据对象。 |
+| `data.pptInfo` | `object` | `{"id":"ppt_xxx"}` | PPT 的完整结构信息。 |
+| `data.pptInfo.id` | `string` | `ppt_xxx` | PPT 唯一标识。 |
+| `data.pptInfo.subject` | `string` | `AI 办公趋势` | PPT 主题或标题。 |
+| `data.pptInfo.coverUrl` | `string` | `https://example.com/cover.png` | PPT 封面图地址。 |
+| `data.pptInfo.templateId` | `string` | `template_xxx` | 当前使用的模板 ID。 |
+| `data.pptInfo.pptxProperty` | `string` | `base64-gzip-json` | 用于编辑器回显和保存的 PPT 结构数据。 |

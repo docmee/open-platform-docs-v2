@@ -1,4 +1,5 @@
 import { DotPattern } from '@/components/ui/dot-pattern'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import type { Metadata } from 'next'
 import { Geist } from 'next/font/google'
@@ -57,39 +58,41 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="zh-CN" dir="ltr" suppressHydrationWarning className={cn('font-sans', geist.variable)}>
       <Head />
       <body>
-        <div className="w-full absolute h-[65vh] top-0 left-0">
-          <DotPattern
-            width={14}
-            height={14}
-            className={cn('mask-[radial-gradient(ellipse_at_top_center,white_10%,transparent_80%)] opacity-50')}
-          />
-        </div>
-        <div className="site-shell">
-          <div
-            className="fixed -bottom-40 -right-24 size-[65vh] opacity-15  bg-accent/50 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)] pointer-events-none"
-            aria-hidden="true"
-          />
-          <div
-            className="fixed -top-[10vh] -left-[30vh] size-[55vh] opacity-15  bg-accent/50 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)] pointer-events-none"
-            aria-hidden="true"
-          />
-          <div
-            className="fixed top-0 -right-[30vh] size-[45vh]  bg-sky-400/10 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)] pointer-events-none"
-            aria-hidden="true"
-          />
+        <TooltipProvider>
+          <div className="w-full absolute h-[65vh] top-0 left-0">
+            <DotPattern
+              width={14}
+              height={14}
+              className={cn('mask-[radial-gradient(ellipse_at_top_center,white_10%,transparent_80%)] opacity-50')}
+            />
+          </div>
+          <div className="site-shell">
+            <div
+              className="fixed -bottom-40 -right-24 size-[65vh] opacity-15  bg-accent/50 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)] pointer-events-none"
+              aria-hidden="true"
+            />
+            <div
+              className="fixed -top-[10vh] -left-[30vh] size-[55vh] opacity-15  bg-accent/50 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)] pointer-events-none"
+              aria-hidden="true"
+            />
+            <div
+              className="fixed top-0 -right-[30vh] size-[45vh]  bg-sky-400/10 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)] pointer-events-none"
+              aria-hidden="true"
+            />
 
-          <Layout
-            navbar={navbar}
-            feedback={{ content: null, labels: undefined }}
-            editLink={null}
-            copyPageButton={true}
-            toc={{ title: '目录', float: true }}
-            pageMap={await getPageMap('')}
-            footer={footer}
-          >
-            <main className="nextra-article-main relative z-10">{children}</main>
-          </Layout>
-        </div>
+            <Layout
+              navbar={navbar}
+              feedback={{ content: null, labels: undefined }}
+              editLink={null}
+              copyPageButton={true}
+              toc={{ title: '目录', float: true }}
+              pageMap={await getPageMap('')}
+              footer={footer}
+            >
+              <main className="nextra-article-main relative z-10">{children}</main>
+            </Layout>
+          </div>
+        </TooltipProvider>
       </body>
     </html>
   )

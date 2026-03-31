@@ -6,8 +6,8 @@ title: '解析文件内容'
 
 ## 接口信息
 
-- 方法：`POST`
-- 路径：`/api/ppt/parseFileData`
+- 方法：<HttpMethodBadge method="POST" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/ppt/parseFileData">https://open.docmee.cn/api/ppt/parseFileData</InlineCode>
 - 鉴权：请求头传 `token`
 - 请求体：`multipart/form-data`
 
@@ -15,14 +15,30 @@ title: '解析文件内容'
 
 把文件、粘贴文本、文件链接、网页链接或搜索词预处理为 `dataUrl`，供 `V1` 系列生成接口复用。
 
-## 可用输入
 
-- `file`：上传文件
-- `content`：直接粘贴的文本
-- `fileUrl`：公网可访问的文件地址
-- `website`：网页地址
-- `websearch`：搜索关键词
+## 请求示例
 
+```bash
+curl --request POST \
+  --url https://open.docmee.cn/api/ppt/parseFileData \
+  --header "token: YOUR_TEMP_TOKEN" \
+  --form "file=@demo.docx"
+```
+## 请求参数
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `file` | `File` | 否 | `demo.docx` | 上传本地文件并解析内容。 |
+| `content` | `string` | 否 | `请根据以下材料生成 PPT` | 直接传入粘贴文本。 |
+| `fileUrl` | `string` | 否 | `https://example.com/demo.pdf` | 传入公网可访问的文件地址。 |
+| `website` | `string` | 否 | `https://example.com/article` | 传入网页地址并抓取正文。 |
+| `websearch` | `string` | 否 | `AI 办公趋势` | 传入搜索关键词，由服务端检索相关内容。 |
+
+## 参数说明
+
+- 五种输入方式通常任选其一即可。
+- 上传文件场景建议控制在 <strong>50M</strong> 以内。
+- 响应中的 <InlineCode>dataUrl</InlineCode> 可继续复用于 <InlineCode>generateOutline</InlineCode> 或 <InlineCode>directGeneratePptx</InlineCode>。
 ## 响应示例
 
 ```json
@@ -33,6 +49,14 @@ title: '解析文件内容'
   "code": 0
 }
 ```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `data` | `object` | `{"dataUrl":"https://xxx"}` | 业务数据对象。 |
+| `data.dataUrl` | `string` | `https://xxx` | 字段用途请结合接口场景传入。 |
+| `code` | `number` | `0` | 通用响应状态码，0 表示成功。 |
 
 ## 说明
 

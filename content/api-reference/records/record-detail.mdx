@@ -6,17 +6,40 @@ title: '查询记录详情'
 
 ## 接口信息
 
-- 方法：`GET`
-- 路径：`/api/record/getById?id=`
+- 方法：<HttpMethodBadge method="GET" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/record/getById?id=">https://open.docmee.cn/api/record/getById?id=</InlineCode>
 - 鉴权：请求头传 `Api-Key`
 
 ## 接口作用
 
 获取单条积分记录对应的详细对象信息。
 
+## 请求示例
+
+```bash
+curl --request GET \
+  --url "https://open.docmee.cn/api/record/getById?id=" \
+  --header "Api-Key: YOUR_API_KEY"
+```
+
 ## 请求参数
 
 - `id`：记录 ID
+
+
+## 请求字段说明
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `code` | `number` | 否 | `0` | 字段用途请结合接口场景传入。 |
+| `message` | `string` | 否 | `操作成功` | 字段用途请结合接口场景传入。 |
+| `data` | `object` | 否 | `{"name":"VALUE","subject":"VALUE","coverUrl":"VALUE","fileUrl":"VALUE","templateId":"templateId_xxx","createTime":"VALUE"}` | 字段用途请结合接口场景传入。 |
+| `data.name` | `string` | 否 | `VALUE` | 字段用途请结合接口场景传入。 |
+| `data.subject` | `string` | 否 | `VALUE` | 字段用途请结合接口场景传入。 |
+| `data.coverUrl` | `string` | 否 | `VALUE` | 字段用途请结合接口场景传入。 |
+| `data.fileUrl` | `string` | 否 | `VALUE` | 字段用途请结合接口场景传入。 |
+| `data.templateId` | `string` | 否 | `templateId_xxx` | 字段用途请结合接口场景传入。 |
+| `data.createTime` | `string` | 否 | `VALUE` | 字段用途请结合接口场景传入。 |
 
 ## 返回内容
 
@@ -30,3 +53,34 @@ title: '查询记录详情'
 - `createTime`
 
 资源地址访问时通常仍需要拼接 `token`。
+
+
+## 响应示例
+
+```json
+{
+  "code": 0,
+  "message": "操作成功",
+  "data": {
+    "name": "VALUE",
+    "subject": "VALUE",
+    "coverUrl": "VALUE",
+    "fileUrl": "VALUE",
+    "templateId": "templateId_xxx",
+    "createTime": "VALUE"
+  }
+}
+```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 通用响应状态码，0 表示成功。 |
+| `message` | `string` | `操作成功` | 服务端返回的结果说明。 |
+| `name` | `string` | `VALUE` | 字段用途请结合接口场景传入。 |
+| `subject` | `string` | `VALUE` | 字段用途请结合接口场景传入。 |
+| `coverUrl` | `string` | `VALUE` | 封面图地址。 |
+| `fileUrl` | `string` | `VALUE` | 文件下载地址。 |
+| `templateId` | `string` | `templateId_xxx` | 模板 ID。 |
+| `createTime` | `string` | `VALUE` | 字段用途请结合接口场景传入。 |

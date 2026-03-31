@@ -6,14 +6,25 @@ title: '上传自定义模板'
 
 ## 接口信息
 
-- 方法：`POST`
-- 路径：`/api/ppt/uploadTemplate`
+- 方法：<HttpMethodBadge method="POST" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/ppt/uploadTemplate">https://open.docmee.cn/api/ppt/uploadTemplate</InlineCode>
 - 鉴权：请求头传 `token`
 - 请求体：`multipart/form-data`
 
 ## 接口作用
 
 上传一个用户自定义模板，或通过 `templateId` 覆盖已有模板。
+
+## 请求示例
+
+```bash
+curl --request POST \
+  --url https://open.docmee.cn/api/ppt/uploadTemplate \
+  --header "token: YOUR_TEMP_TOKEN" \
+  --form "type=4" \
+  --form "file=@custom-template.pptx" \
+  --form "templateId=TEMPLATE_ID"
+```
 
 ## 请求参数
 
@@ -28,3 +39,24 @@ title: '上传自定义模板'
 - 上传后系统会自动做模板学习与标注
 - 覆盖公共模板时需要改用 `Api-Key` 调用
 - 封面访问需要拼接 `token`
+
+
+## 响应示例
+
+```json
+{
+  "code": 0,
+  "message": "操作成功",
+  "data": {
+    "id": "VALUE"
+  }
+}
+```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 通用响应状态码，0 表示成功。 |
+| `message` | `string` | `操作成功` | 服务端返回的结果说明。 |
+| `data` | `object` | `{...}` | 业务数据对象。 |

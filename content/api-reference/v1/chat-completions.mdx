@@ -6,13 +6,32 @@ title: '对话生成 PPT'
 
 ## 接口信息
 
-- 方法：`POST`
-- 路径：`/api/ppt-openai/v1/chat/completions`
+- 方法：<HttpMethodBadge method="POST" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/ppt-openai/v1/chat/completions">https://open.docmee.cn/api/ppt-openai/v1/chat/completions</InlineCode>
 - 鉴权：支持 `Api-Key` 或 `Authorization: Bearer ...`
 
 ## 接口作用
 
 用兼容 OpenAI Chat Completions 的方式生成 PPT，适合接入已经支持 OpenAI 接口规范的工具或代理层。
+
+## 请求示例
+
+```bash
+curl --request POST \
+  --url https://open.docmee.cn/api/ppt-openai/v1/chat/completions \
+  --header "Content-Type: application/json" \
+  --header "Api-Key: YOUR_API_KEY" \
+  --data '{
+  "stream": true,
+  "model": "direct-generate-pptx",
+  "messages": [
+    {
+      "role": "user",
+      "content": "请生成一份关于 AI 未来发展的 PPT"
+    }
+  ]
+}'
+```
 
 ## 请求参数
 
@@ -29,6 +48,15 @@ title: '对话生成 PPT'
 }
 ```
 
+
+## 请求字段说明
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `stream` | `boolean` | 否 | `true` | 是否启用流式返回。 |
+| `model` | `string` | 否 | `direct-generate-pptx` | 字段用途请结合接口场景传入。 |
+| `messages` | `array` | 否 | `[{"role":"user","content":"请生成一份关于 AI 未来发展的 PPT"}]` | 字段用途请结合接口场景传入。 |
+
 ## 扩展参数
 
 - `appendLink`：是否在结果末尾附加封面和下载链接
@@ -41,3 +69,23 @@ title: '对话生成 PPT'
 - 非流式模式下返回标准 Chat 响应结构
 - `choices[].message.content` 中是 Markdown 内容
 - `ppt_data` 中包含 PPT 生成结果的扩展信息
+
+
+## 响应示例
+
+```text
+event: message
+data: {"status":3,"text":"生成中..."}
+
+event: message
+data: {"status":4,"markdown":"# 主题"}
+```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `event` | `string` | `message` | SSE 事件名。 |
+| `data.status` | `number` | `3` | 当前生成状态。常见值如 1、3、4。 |
+| `data.text` | `string` | `生成中...` | 当前阶段返回的文本片段或提示。 |
+| `data.markdown` | `string` | `# 主题` | 生成完成后返回的 Markdown 内容。 |

@@ -6,13 +6,28 @@ title: '获取模板过滤选项'
 
 ## 接口信息
 
-- 方法：`GET`
-- 路径：`/api/ppt/template/options`
+- 方法：<HttpMethodBadge method="GET" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/ppt/template/options">https://open.docmee.cn/api/ppt/template/options</InlineCode>
 - 鉴权：请求头传 `token`
 
 ## 接口作用
 
 返回模板筛选用的枚举值，包括类目、风格和主题颜色。
+
+
+## 请求示例
+
+```bash
+curl --request GET \
+  --url "https://open.docmee.cn/api/ppt/template/options" \
+  --header "token: YOUR_TEMP_TOKEN"
+```
+
+## 请求参数
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `lang` | `string` | 否 | `zh` | 可选的查询参数，用于指定返回内容的语言版本。未传时使用默认语言。 |
 
 ## 返回内容
 
@@ -23,3 +38,28 @@ title: '获取模板过滤选项'
 ## 使用说明
 
 适合作为模板列表查询前的初始化接口，避免前端写死筛选条件。
+
+
+## 响应示例
+
+```json
+{
+  "code": 0,
+  "message": "操作成功",
+  "data": {
+    "category": "VALUE",
+    "style": "VALUE",
+    "themeColor": "VALUE"
+  }
+}
+```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 通用响应状态码，0 表示成功。 |
+| `message` | `string` | `操作成功` | 服务端返回的结果说明。 |
+| `category` | `string` | `VALUE` | 字段用途请结合接口场景传入。 |
+| `style` | `string` | `VALUE` | 字段用途请结合接口场景传入。 |
+| `themeColor` | `string` | `VALUE` | 字段用途请结合接口场景传入。 |

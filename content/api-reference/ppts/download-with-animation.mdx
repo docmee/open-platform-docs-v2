@@ -6,20 +6,28 @@ title: '下载智能动画 PPT'
 
 ## 接口信息
 
-- 方法：`GET`
-- 路径：`/api/ppt/downloadWithAnimation?type=1&id=xxx`
+- 方法：<HttpMethodBadge method="GET" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/ppt/downloadWithAnimation?type=1&id=xxx">https://open.docmee.cn/api/ppt/downloadWithAnimation?type=1&id=xxx</InlineCode>
 - 鉴权：请求头传 `token`
 
 ## 接口作用
 
 在原有 PPT 基础上自动补充入场动画和切场动画，再返回文件流。
 
-## URL 参数
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `type` | `number` | `1` 依次展示；`2` 单击展示 |
-| `id` | `string` | PPT ID |
+## 请求示例
+
+```bash
+curl --request GET \
+  --url "https://open.docmee.cn/api/ppt/downloadWithAnimation?type=1&id=xxx" \
+  --header "token: YOUR_TEMP_TOKEN"
+```
+## 请求参数
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `type` | `number` | 是 | `1` | 动画模式。`1` 表示依次展示，`2` 表示单击展示。 |
+| `id` | `string` | 是 | `ppt_xxx` | 需要下载动画版文件的 PPT ID。 |
 
 ## 响应
 
@@ -29,3 +37,22 @@ title: '下载智能动画 PPT'
 
 - `1` 更适合自动播放场景
 - `2` 更适合现场演示、逐项点击讲解
+
+
+## 响应示例
+
+```text
+HTTP/1.1 200 OK
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename=demo.pptx
+
+[binary content]
+```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `HTTP Status` | `number` | `200` | 请求成功时返回 200。 |
+| `Content-Type` | `string` | `application/octet-stream` | 返回二进制 PPT 文件流。 |
+| `Body` | `binary` | `PPT binary stream` | 文件二进制内容，浏览器或客户端应按下载流处理。 |

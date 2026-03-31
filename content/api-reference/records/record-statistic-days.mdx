@@ -6,13 +6,28 @@ title: '按天统计积分使用'
 
 ## 接口信息
 
-- 方法：`POST`
-- 路径：`/api/record/statisticDays`
+- 方法：<HttpMethodBadge method="POST" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/record/statisticDays">https://open.docmee.cn/api/record/statisticDays</InlineCode>
 - 鉴权：请求头传 `Api-Key`
 
 ## 接口作用
 
 按天统计指定时间区间内的调用次数与积分消耗。
+
+## 请求示例
+
+```bash
+curl --request POST \
+  --url https://open.docmee.cn/api/record/statisticDays \
+  --header "Content-Type: application/json" \
+  --header "Api-Key: YOUR_API_KEY" \
+  --data '{
+  "type": null,
+  "uid": null,
+  "startDate": "2025-01-01 00:00:00",
+  "endDate": "2025-01-30 23:59:59"
+}'
+```
 
 ## 请求参数
 
@@ -25,8 +40,43 @@ title: '按天统计积分使用'
 }
 ```
 
+
+## 请求字段说明
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `type` | `string` | 否 | `null` | 业务类型或分类值。 |
+| `uid` | `string` | 否 | `null` | 第三方用户标识，用于隔离数据。 |
+| `startDate` | `string` | 否 | `2025-01-01 00:00:00` | 时间范围字段。 |
+| `endDate` | `string` | 否 | `2025-01-30 23:59:59` | 时间范围字段。 |
+
 ## 返回字段
 
 - `date`：日期
 - `count`：使用次数
 - `amount`：消耗积分
+
+
+## 响应示例
+
+```json
+{
+  "code": 0,
+  "message": "操作成功",
+  "data": {
+    "date": "VALUE",
+    "count": "VALUE",
+    "amount": "VALUE"
+  }
+}
+```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 通用响应状态码，0 表示成功。 |
+| `message` | `string` | `操作成功` | 服务端返回的结果说明。 |
+| `date` | `string` | `VALUE` | 统计日期。 |
+| `count` | `number` | `VALUE` | 统计数量或剩余次数。 |
+| `amount` | `number` | `VALUE` | 积分消耗数量。 |

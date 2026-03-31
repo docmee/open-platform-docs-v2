@@ -6,17 +6,36 @@ title: '查询异步生成 PPT 信息'
 
 ## 接口信息
 
-- 方法：`GET`
-- 路径：`/api/ppt/asyncPptInfo?pptId=`
+- 方法：<HttpMethodBadge method="GET" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/ppt/asyncPptInfo?pptId=">https://open.docmee.cn/api/ppt/asyncPptInfo?pptId=</InlineCode>
 - 鉴权：请求头传 `token`
 
 ## 接口作用
 
 查询异步生成流程中的当前 PPT 进度与中间数据。
 
+## 请求示例
+
+```bash
+curl --request GET \
+  --url "https://open.docmee.cn/api/ppt/asyncPptInfo?pptId=" \
+  --header "token: YOUR_TEMP_TOKEN"
+```
+
 ## 请求参数
 
 - `pptId`：来自异步 `generateContent` 流式响应
+
+
+## 请求字段说明
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `code` | `number` | 否 | `0` | 字段用途请结合接口场景传入。 |
+| `data` | `object` | 否 | `{"total":23,"current":8,"pptxProperty":"base64-gzip-json"}` | 字段用途请结合接口场景传入。 |
+| `data.total` | `number` | 否 | `23` | 字段用途请结合接口场景传入。 |
+| `data.current` | `number` | 否 | `8` | 字段用途请结合接口场景传入。 |
+| `data.pptxProperty` | `string` | 否 | `base64-gzip-json` | 字段用途请结合接口场景传入。 |
 
 ## 响应示例
 
@@ -30,6 +49,16 @@ title: '查询异步生成 PPT 信息'
   }
 }
 ```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 通用响应状态码，0 表示成功。 |
+| `data` | `object` | `{"total":23,"current":8,"pptxProperty":"base64-gzip-json"}` | 业务数据对象。 |
+| `data.total` | `number` | `23` | 字段用途请结合接口场景传入。 |
+| `data.current` | `number` | `8` | 字段用途请结合接口场景传入。 |
+| `data.pptxProperty` | `string` | `base64-gzip-json` | PPT 结构数据，用于编辑器回显或再次保存。 |
 
 ## 使用说明
 

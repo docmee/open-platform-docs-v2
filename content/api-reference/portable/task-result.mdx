@@ -6,8 +6,8 @@ title: '查询便携版结果'
 
 ## 接口信息
 
-- 方法：`POST`
-- 路径：`https://open.docmee.cn/v2/api/ppt/portable/taskResult`
+- 方法：<HttpMethodBadge method="POST" />
+- 路径：<InlineCode value="https://open.docmee.cn/v2/api/ppt/portable/taskResult">https://open.docmee.cn/v2/api/ppt/portable/taskResult</InlineCode>
 - 鉴权：请求头传 `token`
 - 请求体：`application/json`
 
@@ -18,6 +18,18 @@ title: '查询便携版结果'
 - 创建任务时使用了 `stream=false`
 - SSE 连接中断后恢复结果查询
 - 业务侧需要主动轮询任务进度
+
+## 请求示例
+
+```bash
+curl --request POST \
+  --url https://open.docmee.cn/v2/api/ppt/portable/taskResult \
+  --header "Content-Type: application/json" \
+  --header "token: YOUR_TEMP_TOKEN" \
+  --data '{
+  "taskId": "PORTABLE_TASK_ID"
+}'
+```
 
 ## 请求参数
 
@@ -189,3 +201,14 @@ public class PortableTaskResultExample {
   }
 }
 ```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 通用响应状态码，0 表示成功。 |
+| `data` | `object` | `{"taskId":"PORTABLE_TASK_ID","status":"processing","progress` | 业务数据对象。 |
+| `data.taskId` | `string` | `PORTABLE_TASK_ID` | 字段用途请结合接口场景传入。 |
+| `data.status` | `string` | `processing` | 当前处理状态。 |
+| `data.progress` | `number` | `65` | 当前处理进度。 |
+| `data.step` | `string` | `generate_ppt` | 字段用途请结合接口场景传入。 |

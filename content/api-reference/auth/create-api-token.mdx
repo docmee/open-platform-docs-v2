@@ -6,13 +6,27 @@ title: '创建接口 Token'
 
 ## 接口信息
 
-- 方法：`POST`
-- 路径：`/api/user/createApiToken`
+- 方法：<HttpMethodBadge method="POST" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/user/createApiToken">https://open.docmee.cn/api/user/createApiToken</InlineCode>
 - 鉴权：请求头传 `Api-Key`
 
 ## 接口作用
 
 创建后续 API 调用使用的临时 `token`。该 Token 支持按 `uid` 做数据隔离，也支持通过 `limit` 限制最多可生成的 PPT 次数。
+
+## 请求示例
+
+```bash
+curl --request POST \
+  --url https://open.docmee.cn/api/user/createApiToken \
+  --header "Content-Type: application/json" \
+  --header "Api-Key: YOUR_API_KEY" \
+  --data '{
+  "uid": "third-party-user-id",
+  "limit": 10,
+  "timeOfHours": 2
+}'
+```
 
 ## 请求参数
 
@@ -28,6 +42,15 @@ title: '创建接口 Token'
 - `limit`：允许生成 PPT 的次数；`0` 表示不能生成
 - `timeOfHours`：有效期小时数，默认 2，最大 48
 
+
+## 请求字段说明
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `uid` | `string` | 否 | `third-party-user-id` | 第三方用户标识，用于隔离数据。 |
+| `limit` | `number` | 否 | `10` | 允许调用或生成的次数上限。 |
+| `timeOfHours` | `number` | 否 | `2` | 字段用途请结合接口场景传入。 |
+
 ## 响应示例
 
 ```json
@@ -41,13 +64,23 @@ title: '创建接口 Token'
 }
 ```
 
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `data` | `object` | `{"token":"sk_xxx","expireTime":7200}` | 业务数据对象。 |
+| `data.token` | `string` | `sk_xxx` | 字段用途请结合接口场景传入。 |
+| `data.expireTime` | `number` | `7200` | 字段用途请结合接口场景传入。 |
+| `code` | `number` | `0` | 通用响应状态码，0 表示成功。 |
+| `message` | `string` | `操作成功` | 服务端返回的结果说明。 |
+
 ## 多语言示例
 
 <ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
   <ApiCodeTab>
 
 ```js
-const response = await fetch('https://docmee.cn/api/user/createApiToken', {
+const response = await fetch('https://open.docmee.cn/api/user/createApiToken', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -70,7 +103,7 @@ console.log(await response.json())
 import requests
 
 response = requests.post(
-    'https://docmee.cn/api/user/createApiToken',
+    'https://open.docmee.cn/api/user/createApiToken',
     headers={
         'Content-Type': 'application/json',
         'Api-Key': 'YOUR_API_KEY'
@@ -96,7 +129,7 @@ import (
 
 func main() {
   body := []byte(`{"uid":"demo-user","limit":10,"timeOfHours":2}`)
-  req, _ := http.NewRequest("POST", "https://docmee.cn/api/user/createApiToken", bytes.NewBuffer(body))
+  req, _ := http.NewRequest("POST", "https://open.docmee.cn/api/user/createApiToken", bytes.NewBuffer(body))
   req.Header.Set("Content-Type", "application/json")
   req.Header.Set("Api-Key", "YOUR_API_KEY")
 
@@ -121,7 +154,7 @@ public class CreateApiTokenExample {
     String body = "{\"uid\":\"demo-user\",\"limit\":10,\"timeOfHours\":2}";
 
     HttpRequest request = HttpRequest.newBuilder()
-      .uri(URI.create("https://docmee.cn/api/user/createApiToken"))
+      .uri(URI.create("https://open.docmee.cn/api/user/createApiToken"))
       .header("Content-Type", "application/json")
       .header("Api-Key", "YOUR_API_KEY")
       .POST(HttpRequest.BodyPublishers.ofString(body))

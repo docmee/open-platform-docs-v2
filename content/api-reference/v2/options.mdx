@@ -6,13 +6,28 @@ title: '获取生成选项'
 
 ## 接口信息
 
-- 方法：`GET`
-- 路径：`/api/ppt/v2/options`
+- 方法：<HttpMethodBadge method="GET" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/ppt/v2/options">https://open.docmee.cn/api/ppt/v2/options</InlineCode>
 - 鉴权：请求头传 `token`
 
 ## 接口作用
 
 返回 V2 生成内容时可选的语言、场景、受众等配置项，适合在前端表单中动态展示。
+
+
+## 请求示例
+
+```bash
+curl --request GET \
+  --url "https://open.docmee.cn/api/ppt/v2/options" \
+  --header "token: YOUR_TEMP_TOKEN"
+```
+
+## 请求参数
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `lang` | `string` | 否 | `zh` | 可选查询参数，用于指定返回选项的语言版本。 |
 
 ## 返回内容
 
@@ -26,3 +41,30 @@ title: '获取生成选项'
 
 - 该接口支持国际化，可在 URL 携带 `lang` 参数
 - 推荐在调用 `generateContent` 前先拉取一次，避免前端写死枚举值
+
+
+## 响应示例
+
+```json
+{
+  "code": 0,
+  "message": "操作成功",
+  "data": {
+    "lang": "VALUE",
+    "scene": "VALUE",
+    "audience": "VALUE",
+    "generateContent": "VALUE"
+  }
+}
+```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 通用响应状态码，0 表示成功。 |
+| `message` | `string` | `操作成功` | 服务端返回的结果说明。 |
+| `lang` | `string` | `VALUE` | 字段用途请结合接口场景传入。 |
+| `scene` | `string` | `VALUE` | 字段用途请结合接口场景传入。 |
+| `audience` | `string` | `VALUE` | 字段用途请结合接口场景传入。 |
+| `generateContent` | `string` | `VALUE` | 字段用途请结合接口场景传入。 |

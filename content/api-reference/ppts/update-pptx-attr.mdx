@@ -6,13 +6,27 @@ title: '更新 PPT 属性'
 
 ## 接口信息
 
-- 方法：`POST`
-- 路径：`/api/ppt/updatePptxAttr`
+- 方法：<HttpMethodBadge method="POST" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/ppt/updatePptxAttr">https://open.docmee.cn/api/ppt/updatePptxAttr</InlineCode>
 - 鉴权：请求头传 `token`
 
 ## 接口作用
 
 修改已有 PPT 的名称或主题。
+
+## 请求示例
+
+```bash
+curl --request POST \
+  --url https://open.docmee.cn/api/ppt/updatePptxAttr \
+  --header "Content-Type: application/json" \
+  --header "token: YOUR_TEMP_TOKEN" \
+  --data '{
+  "id": "ppt_xxx",
+  "name": "新的名称",
+  "subject": "新的主题"
+}'
+```
 
 ## 请求参数
 
@@ -24,6 +38,36 @@ title: '更新 PPT 属性'
 }
 ```
 
+
+## 请求字段说明
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `id` | `string` | 否 | `ppt_xxx` | 业务对象 ID。 |
+| `name` | `string` | 否 | `新的名称` | 字段用途请结合接口场景传入。 |
+| `subject` | `string` | 否 | `新的主题` | 字段用途请结合接口场景传入。 |
+
 ## 说明
 
 `name` 和 `subject` 至少传一个非空值。
+
+
+## 响应示例
+
+```json
+{
+  "code": 0,
+  "message": "操作成功",
+  "data": {
+    "id": "VALUE"
+  }
+}
+```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 通用响应状态码，0 表示成功。 |
+| `message` | `string` | `操作成功` | 服务端返回的结果说明。 |
+| `data` | `object` | `{...}` | 业务数据对象。 |
