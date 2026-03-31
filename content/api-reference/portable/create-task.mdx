@@ -7,7 +7,7 @@ title: '创建便携版任务'
 ## 接口信息
 
 - 方法：<HttpMethodBadge method="POST" />
-- 路径：<InlineCode value="https://open.docmee.cn/v2/api/ppt/portable/createTask">https://open.docmee.cn/v2/api/ppt/portable/createTask</InlineCode>
+- 路径：<InlineCode value="https://open.docmee.cn/v2/api/ppt/portable/create-task">https://open.docmee.cn/v2/api/ppt/portable/create-task</InlineCode>
 - 鉴权：请求头传 <InlineCode>token</InlineCode>
 - 请求体：支持 <InlineCode>application/json</InlineCode> 和 <InlineCode>multipart/form-data</InlineCode>
 
@@ -26,7 +26,7 @@ title: '创建便携版任务'
 
 ```bash
 curl --request POST \
-  --url https://open.docmee.cn/v2/api/ppt/portable/createTask \
+  --url https://open.docmee.cn/v2/api/ppt/portable/create-task \
   --header "Content-Type: application/json" \
   --header "token: YOUR_TEMP_TOKEN" \
   --data '{
@@ -94,7 +94,7 @@ curl --request POST \
 
 ```bash
 curl --request POST \
-  --url https://open.docmee.cn/v2/api/ppt/portable/createTask \
+  --url https://open.docmee.cn/v2/api/ppt/portable/create-task \
   --header "Content-Type: application/json" \
   --header "token: YOUR_TEMP_TOKEN" \
   --data '{
@@ -114,7 +114,7 @@ curl --request POST \
   <ApiCodeTab>
 
 ```js
-const response = await fetch('https://open.docmee.cn/v2/api/ppt/portable/createTask', {
+const response = await fetch('https://open.docmee.cn/v2/api/ppt/portable/create-task', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ console.log(await response.json())
 import requests
 
 response = requests.post(
-    'https://open.docmee.cn/v2/api/ppt/portable/createTask',
+    'https://open.docmee.cn/v2/api/ppt/portable/create-task',
     headers={
         'Content-Type': 'application/json',
         'token': 'YOUR_TEMP_TOKEN'
@@ -179,7 +179,7 @@ import (
 
 func main() {
   body := []byte(`{"type":1,"content":"请生成一份关于 AI 办公趋势的产品介绍 PPT","templateId":"TEMPLATE_ID","stream":false,"length":"medium","scene":"产品介绍","audience":"客户","lang":"zh","prompt":"语气专业，适合演示"}`)
-  req, _ := http.NewRequest("POST", "https://open.docmee.cn/v2/api/ppt/portable/createTask", bytes.NewBuffer(body))
+  req, _ := http.NewRequest("POST", "https://open.docmee.cn/v2/api/ppt/portable/create-task", bytes.NewBuffer(body))
   req.Header.Set("Content-Type", "application/json")
   req.Header.Set("token", "YOUR_TEMP_TOKEN")
 
@@ -217,7 +217,7 @@ public class PortableCreateTaskExample {
       """;
 
     HttpRequest request = HttpRequest.newBuilder()
-      .uri(URI.create("https://open.docmee.cn/v2/api/ppt/portable/createTask"))
+      .uri(URI.create("https://open.docmee.cn/v2/api/ppt/portable/create-task"))
       .header("Content-Type", "application/json")
       .header("token", "YOUR_TEMP_TOKEN")
       .POST(HttpRequest.BodyPublishers.ofString(body))

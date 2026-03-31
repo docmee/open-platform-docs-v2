@@ -36,8 +36,8 @@ https://open.docmee.cn/v2/api/ppt/portable
 
 对应只需要 2 个接口：
 
-- [`POST /api/ppt/portable/createTask`](/api-reference/portable/create-task)
-- [`POST /api/ppt/portable/taskResult`](/api-reference/portable/task-result)
+- [`POST /api/ppt/portable/create-task`](/api-reference/portable/create-task)
+- [`POST /api/ppt/portable/task-result`](/api-reference/portable/task-result)
 
 ## 第 1 步：创建调用 Token
 
@@ -51,7 +51,7 @@ token: YOUR_TEMP_TOKEN
 
 ## 第 2 步：创建便携版任务
 
-调用 [`POST https://open.docmee.cn/v2/api/ppt/portable/createTask`](/api-reference/portable/create-task) 创建任务。
+调用 [`POST https://open.docmee.cn/v2/api/ppt/portable/create-task`](/api-reference/portable/create-task) 创建任务。
 
 ### 请求方式
 
@@ -85,9 +85,15 @@ token: YOUR_TEMP_TOKEN
 | `prompt` | `string` | ❌ | [`generateContent`](/api-reference/v2/generate-content) | 附加要求，建议保持简短 |
 | `useAgent` | `boolean` | ❌ | - | 是否使用智能体生成，默认 `false` |
 
+
 `useAgent` 仅在任务类型为 `1` 时生效，其他任务类型会忽略该字段。
 
 `useAgent` 为 `true` 时，会使用智能体（智能体会自行思考、搜索、总结）生成内容。
+
+
+<Callout type="info">
+如果您想让大纲效果更好，您可以开启智能体生成，开启后智能体会自行思考、搜索、总结（内容生成更准确，但耗时更长，消耗1积分）。
+</Callout>
 
 
 
@@ -269,7 +275,7 @@ data: {"taskId":"PORTABLE_TASK_ID","status":"success","progress":100,"pptId":"PP
 如果你没有使用 SSE，或者需要在断线后继续查询任务结果，可以调用：
 
 ```text
-POST https://open.docmee.cn/v2/api/ppt/portable/taskResult
+POST https://open.docmee.cn/v2/api/ppt/portable/task-result
 ```
 
 ### 请求参数
@@ -297,7 +303,7 @@ POST https://open.docmee.cn/v2/api/ppt/portable/taskResult
   <ApiCodeTab>
 
 ```js
-const response = await fetch('https://open.docmee.cn/v2/api/ppt/portable/taskResult', {
+const response = await fetch('https://open.docmee.cn/v2/api/ppt/portable/task-result', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -319,7 +325,7 @@ console.log(result)
 import requests
 
 response = requests.post(
-    'https://open.docmee.cn/v2/api/ppt/portable/taskResult',
+    'https://open.docmee.cn/v2/api/ppt/portable/task-result',
     headers={
         'Content-Type': 'application/json',
         'token': 'YOUR_TEMP_TOKEN'
