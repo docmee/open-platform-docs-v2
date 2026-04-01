@@ -1,3 +1,4 @@
+import { CodeIcon, DollarSignIcon, PackageIcon, RocketIcon } from 'lucide-react'
 import { MetaRecord } from 'nextra'
 
 const meta: MetaRecord = {
@@ -5,25 +6,45 @@ const meta: MetaRecord = {
     title: '开始',
     display: 'hidden',
   },
-  'how-to-use': {
-    title: '使用指南',
-    type: 'page',
-  },
+  // 'how-to-use': {
+  //   title: '使用指南',
+  //   type: 'page',
+  // },
   'getting-started': {
-    title: '快速开始',
+    title: (
+      <span className="inline-flex items-center gap-2">
+        <RocketIcon className="size-4" />
+        快速开始
+      </span>
+    ),
     type: 'page',
   },
   'api-reference': {
-    title: 'API 参考',
+    title: (
+      <span className="inline-flex items-center gap-2">
+        <CodeIcon className="size-4" />
+        API 参考
+      </span>
+    ),
     type: 'page',
   },
   'open-capabilities': {
-    title: '开放能力',
+    title: (
+      <span className="inline-flex items-center gap-2">
+        <PackageIcon className="size-4" />
+        开放能力
+      </span>
+    ),
     type: 'page',
   },
 
-  'pricing': {
-    title: '定价',
+  pricing: {
+    title: (
+      <span className="inline-flex items-center gap-2">
+        <DollarSignIcon className="size-4" />
+        定价
+      </span>
+    ),
     type: 'page',
   },
 }

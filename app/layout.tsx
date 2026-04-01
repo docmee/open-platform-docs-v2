@@ -6,7 +6,7 @@ import { Geist } from 'next/font/google'
 import Image from 'next/image'
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import 'nextra-theme-docs/style.css'
-import { Head } from 'nextra/components'
+import { Banner, Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import './global.css'
 
@@ -53,13 +53,15 @@ const footer = (
   </Footer>
 )
 
+const banner = <Banner storageKey='docmee-open-platform-docs-banner'  >文多多AiPPT 开放平台文档</Banner>
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN" dir="ltr" suppressHydrationWarning className={cn('font-sans', geist.variable)}>
       <Head />
       <body>
         <TooltipProvider>
-          <div className="w-full absolute h-[65vh] top-0 left-0">
+          <div className="w-full absolute h-[80vh] top-0 left-0">
             <DotPattern
               width={14}
               height={14}
@@ -88,6 +90,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               toc={{ title: '目录', float: true }}
               pageMap={await getPageMap('')}
               footer={footer}
+              banner={banner}
             >
               <main className="nextra-article-main relative z-10">{children}</main>
             </Layout>
