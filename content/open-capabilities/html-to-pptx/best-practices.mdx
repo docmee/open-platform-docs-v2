@@ -1,0 +1,35 @@
+---
+title: '最佳实践'
+---
+
+# 最佳实践
+
+## 请求前自检 HTML
+
+- 在业务侧提交前先校验每页是否包含 <InlineCode>.slide</InlineCode> 根元素。
+- 在业务侧统一页面宽高，避免混入非同尺寸页面。
+- 对生成后的 HTML 做基础渲染检查，避免明显缺失内容后再提交转换。
+
+## 合理选择 pageErrorMode
+
+- 如果你的业务要求页数稳定，建议使用 <InlineCode>blank</InlineCode>。
+- 如果你的业务更关注只交付成功页面，建议使用 <InlineCode>skip</InlineCode>。
+- 不要在未理解业务需求的情况下默认跳过失败页，否则可能造成用户误判“内容缺页”。
+
+## 收到结果后立即转存
+
+- 收到 <InlineCode>fileUrl</InlineCode> 后立即下载或转存到自有对象存储。
+- 不要把返回的 OSS 地址当作永久资源 URL 使用。
+- 业务需要归档时，应在收到响应后立刻完成持久化。
+
+## 记录失败页信息
+
+- 即使顶层返回 <InlineCode>code = 0</InlineCode>，也要检查 <InlineCode>failedPageDetails</InlineCode>。
+- 在日志中记录失败页索引、失败码、失败原因和最终处理动作。
+- 对 <InlineCode>failedPageDetails[].index</InlineCode> 使用 1-based 视角展示给业务人员，减少定位歧义。
+
+## 做好重试与告警
+
+- 对 <InlineCode>40010</InlineCode> 不要盲目重试，应直接修正请求。
+- 对 <InlineCode>50199</InlineCode> 可以结合重试策略进行有限次数重试。
+- 对频繁出现的 <InlineCode>50101</InlineCode> 和 <InlineCode>50102</InlineCode> 建议接入告警，以便尽早发现上游 HTML 质量问题。

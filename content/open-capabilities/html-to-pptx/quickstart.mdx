@@ -1,0 +1,58 @@
+---
+title: '快速开始'
+---
+
+# 快速开始
+
+本页提供最短可跑通链路，帮助你尽快完成第一次调用。
+
+## 第 1 步：准备请求
+
+- 确保已经获取可用的 <InlineCode>token</InlineCode> [获取Token](/api-reference/auth/create-api-token)
+- 确保每个 HTML 都包含 <InlineCode>.slide</InlineCode> 根元素
+- 确保所有 HTML 页面使用统一尺寸
+
+## 第 2 步：发送最小请求
+
+```bash
+curl --request POST \
+  --url https://open.docmee.cn/v2/api/htmljson-bridge/convert-html-to-json \
+  --header "Content-Type: application/json" \
+  --header "token: YOUR_TEMP_TOKEN" \
+  --data '{
+    "htmls": [
+      "<div class=\"slide\" style=\"width:1280px;height:720px\"><h1>第一页</h1></div>",
+      "<div class=\"slide\" style=\"width:1280px;height:720px\"><h1>第二页</h1></div>"
+    ],
+    "pageErrorMode": "blank"
+  }'
+```
+
+## 第 3 步：理解最小成功响应
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "fileUrl": "https://oss-example/docmee/result.pptx?Expires=1774955400&Signature=xxx",
+    "expireAt": "2026-03-31T16:30:00Z",
+    "totalPages": 2,
+    "successPages": 2,
+    "failedPages": 0,
+    "pageErrorMode": "blank",
+    "failedPageDetails": []
+  }
+}
+```
+
+## 第 4 步：处理返回结果
+
+- 当 <InlineCode>code = 0</InlineCode> 且存在 <InlineCode>fileUrl</InlineCode> 时，说明文件已经生成成功。
+- 收到 <InlineCode>fileUrl</InlineCode> 后应立即下载或转存。
+- 如果 <InlineCode>failedPages &gt; 0</InlineCode>，说明本次为部分成功，还需要检查 <InlineCode>failedPageDetails</InlineCode>。
+
+## 下一步
+
+- 查看 [完整 API 文档](/open-capabilities/html-to-pptx/api-reference) 获取完整请求和响应结构
+- 查看 [错误码说明](/open-capabilities/html-to-pptx/error-codes) 了解失败处理方式

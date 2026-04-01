@@ -39,28 +39,81 @@ describe('docs center structure', () => {
 
   it('includes the open capabilities structure files', () => {
     expect(existsSync('content/open-capabilities/_meta.ts')).toBe(true)
-    expect(existsSync('content/open-capabilities/html-to-pptx.mdx')).toBe(true)
+    expect(existsSync('content/open-capabilities/html-to-pptx/_meta.ts')).toBe(true)
+    expect(existsSync('content/open-capabilities/html-to-pptx/introduction.mdx')).toBe(
+      true
+    )
+    expect(
+      existsSync('content/open-capabilities/html-to-pptx/integration-notes.mdx')
+    ).toBe(true)
+    expect(existsSync('content/open-capabilities/html-to-pptx/quickstart.mdx')).toBe(
+      true
+    )
+    expect(existsSync('content/open-capabilities/html-to-pptx/api-reference.mdx')).toBe(
+      true
+    )
+    expect(existsSync('content/open-capabilities/html-to-pptx/error-codes.mdx')).toBe(
+      true
+    )
+    expect(
+      existsSync('content/open-capabilities/html-to-pptx/best-practices.mdx')
+    ).toBe(true)
+    expect(existsSync('content/open-capabilities/html-to-pptx/pricing.mdx')).toBe(true)
+    expect(existsSync('content/open-capabilities/html-to-pptx.mdx')).toBe(false)
   })
 
-  it('documents the html-to-pptx open capability page content', () => {
+  it('documents the html-to-pptx open capability multi-page navigation', () => {
     expect(existsSync('content/open-capabilities/_meta.ts')).toBe(true)
-    expect(existsSync('content/open-capabilities/html-to-pptx.mdx')).toBe(true)
+    expect(existsSync('content/open-capabilities/html-to-pptx/_meta.ts')).toBe(true)
 
-    const openCapabilitiesMetaText = readFileSync(
+    const sectionMetaText = readFileSync(
       'content/open-capabilities/_meta.ts',
       'utf8'
     )
-    expect(openCapabilitiesMetaText).toContain("'html-to-pptx': 'HTML 转 PPTX'")
+    expect(sectionMetaText).toContain('html-to-pptx')
 
-    const pageText = readFileSync(
-      'content/open-capabilities/html-to-pptx.mdx',
+    const htmlToPptxMetaText = readFileSync(
+      'content/open-capabilities/html-to-pptx/_meta.ts',
       'utf8'
     )
-    expect(pageText).toContain('# HTML 转 PPTX')
-    expect(pageText).toContain('/v2/api/htmljson-bridge/convert-html-to-json')
-    expect(pageText).toContain('pageErrorMode')
-    expect(pageText).toContain('40010')
-    expect(pageText).toContain('50103')
+    expect(htmlToPptxMetaText).toContain("'introduction': '能力介绍'")
+    expect(htmlToPptxMetaText).toContain("'integration-notes': '接入须知'")
+    expect(htmlToPptxMetaText).toContain("'quickstart': '快速开始'")
+    expect(htmlToPptxMetaText).toContain("'api-reference': '完整 API 文档'")
+    expect(htmlToPptxMetaText).toContain("'error-codes': '错误码说明'")
+    expect(htmlToPptxMetaText).toContain("'best-practices': '最佳实践'")
+    expect(htmlToPptxMetaText).toContain("'pricing': '能力计费'")
+  })
+
+  it('documents the html-to-pptx child page content', () => {
+    const integrationNotesText = readFileSync(
+      'content/open-capabilities/html-to-pptx/integration-notes.mdx',
+      'utf8'
+    )
+    expect(integrationNotesText).toContain('.slide')
+    expect(integrationNotesText).toContain('同一尺寸')
+    expect(integrationNotesText).toContain('临时 OSS 下载地址')
+    expect(integrationNotesText).toContain('不提供长期保存')
+
+    const apiReferenceText = readFileSync(
+      'content/open-capabilities/html-to-pptx/api-reference.mdx',
+      'utf8'
+    )
+    expect(apiReferenceText).toContain('/v2/api/htmljson-bridge/convert-html-to-json')
+
+    const errorCodesText = readFileSync(
+      'content/open-capabilities/html-to-pptx/error-codes.mdx',
+      'utf8'
+    )
+    expect(errorCodesText).toContain('40010')
+    expect(errorCodesText).toContain('50103')
+    expect(errorCodesText).toContain('50199')
+
+    const pricingText = readFileSync(
+      'content/open-capabilities/html-to-pptx/pricing.mdx',
+      'utf8'
+    )
+    expect(pricingText).toContain('能力计费信息即将上线')
   })
 
   it('supports multi-language API code examples with ApiCodeTabs and code fences', () => {

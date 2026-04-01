@@ -4,6 +4,21 @@ title: '创建接口 Token'
 
 # 创建接口 Token
 
+
+## 获取您的 Api-Key
+
+您可以前往[docmee开放平台](https://open.docmee.cn/)注册账号，并获取您的 Api-Key。
+
+**获取方式**
+
+1. 登录 [docmee开放平台](https://open.docmee.cn/)
+2. 点击右上角 "进入工作台" 按钮
+3. 在“我的工作台”页面，选择 “API KEY” 标签页
+4. 在“API KEY”页面，点击“复制”
+
+
+
+
 ## 接口信息
 
 - 方法：<HttpMethodBadge method="POST" />
@@ -174,5 +189,6 @@ public class CreateApiTokenExample {
 ## 使用说明
 
 - 该接口应只在服务端调用
-- 同一个 `uid` 再次创建 Token 时，旧 Token 会在约 10 秒内过期
+- 同一个 `uid` 再次创建 Token 时，旧 Token 会立即过期失效
 - UI 集成场景建议始终设置 `limit`，降低泄露风险
+- 封面图片资源访问，需要在 url 上拼接 ?token=xxx
