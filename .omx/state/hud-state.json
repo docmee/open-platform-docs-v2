@@ -1,5 +1,5 @@
 {
-  "last_turn_at": "2026-03-31T10:35:05.968Z",
-  "turn_count": 41,
-  "last_agent_output": "`HTML 转 PPTX` 已从单页拆成多页结构，旧的 [`html-to-pptx.mdx`](/Users/micahfang/Developer/work/docmee-open-platfor"
+  "last_turn_at": "2026-04-02T02:28:54.988Z",
+  "turn_count": 47,
+  "last_agent_output": "已按你的要求调整。\n\n`HTML 转 PPTX` 子导航顺序现在是：`能力介绍 -> 快速开始 -> ❗限制条件 -> 完整 API 文档 -> 错误码说明 -> 最佳实践 -> 能力计费`，定义在 "
 }

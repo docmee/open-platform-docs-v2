@@ -24,9 +24,9 @@ describe('docs center structure', () => {
   it('defines Chinese navigation labels in root meta', () => {
     expect(existsSync('content/_meta.tsx')).toBe(true)
     const metaText = readFileSync('content/_meta.tsx', 'utf8')
-    expect(metaText).toContain("'how-to-use':")
-    expect(metaText).toContain("title: '快速开始'")
-    expect(metaText).toContain("title: 'API 参考'")
+    expect(metaText).toContain("'getting-started':")
+    expect(metaText).toContain('快速开始')
+    expect(metaText).toContain('API 参考')
   })
 
   it('registers the open capabilities top-level navigation entry', () => {
@@ -34,11 +34,11 @@ describe('docs center structure', () => {
 
     const rootMetaText = readFileSync('content/_meta.tsx', 'utf8')
     expect(rootMetaText).toContain("'open-capabilities':")
-    expect(rootMetaText).toContain("title: '开放能力'")
+    expect(rootMetaText).toContain('开放能力')
   })
 
   it('includes the open capabilities structure files', () => {
-    expect(existsSync('content/open-capabilities/_meta.ts')).toBe(true)
+    expect(existsSync('content/open-capabilities/_meta.tsx')).toBe(true)
     expect(existsSync('content/open-capabilities/html-to-pptx/_meta.ts')).toBe(true)
     expect(existsSync('content/open-capabilities/html-to-pptx/introduction.mdx')).toBe(
       true
@@ -63,22 +63,23 @@ describe('docs center structure', () => {
   })
 
   it('documents the html-to-pptx open capability multi-page navigation', () => {
-    expect(existsSync('content/open-capabilities/_meta.ts')).toBe(true)
+    expect(existsSync('content/open-capabilities/_meta.tsx')).toBe(true)
     expect(existsSync('content/open-capabilities/html-to-pptx/_meta.ts')).toBe(true)
 
     const sectionMetaText = readFileSync(
-      'content/open-capabilities/_meta.ts',
+      'content/open-capabilities/_meta.tsx',
       'utf8'
     )
     expect(sectionMetaText).toContain('html-to-pptx')
+    expect(sectionMetaText).toContain('HTML 转 PPTX')
 
     const htmlToPptxMetaText = readFileSync(
       'content/open-capabilities/html-to-pptx/_meta.ts',
       'utf8'
     )
     expect(htmlToPptxMetaText).toContain("'introduction': '能力介绍'")
-    expect(htmlToPptxMetaText).toContain("'integration-notes': '接入须知'")
     expect(htmlToPptxMetaText).toContain("'quickstart': '快速开始'")
+    expect(htmlToPptxMetaText).toContain("'integration-notes': '❗限制条件'")
     expect(htmlToPptxMetaText).toContain("'api-reference': '完整 API 文档'")
     expect(htmlToPptxMetaText).toContain("'error-codes': '错误码说明'")
     expect(htmlToPptxMetaText).toContain("'best-practices': '最佳实践'")
@@ -91,15 +92,19 @@ describe('docs center structure', () => {
       'utf8'
     )
     expect(integrationNotesText).toContain('.slide')
-    expect(integrationNotesText).toContain('同一尺寸')
+    expect(integrationNotesText).toContain('1280 × 720')
+    expect(integrationNotesText).toContain('尽力缩放到目标尺寸')
     expect(integrationNotesText).toContain('临时 OSS 下载地址')
     expect(integrationNotesText).toContain('不提供长期保存')
+    expect(integrationNotesText).toContain('filename')
 
     const apiReferenceText = readFileSync(
       'content/open-capabilities/html-to-pptx/api-reference.mdx',
       'utf8'
     )
     expect(apiReferenceText).toContain('/v2/api/htmljson-bridge/convert-html-to-json')
+    expect(apiReferenceText).toContain('filename')
+    expect(apiReferenceText).toContain('/open-capabilities/html-to-pptx/integration-notes')
 
     const errorCodesText = readFileSync(
       'content/open-capabilities/html-to-pptx/error-codes.mdx',
@@ -114,6 +119,19 @@ describe('docs center structure', () => {
       'utf8'
     )
     expect(pricingText).toContain('能力计费信息即将上线')
+
+    const quickstartText = readFileSync(
+      'content/open-capabilities/html-to-pptx/quickstart.mdx',
+      'utf8'
+    )
+    expect(quickstartText).toContain('filename')
+    expect(quickstartText).toContain('/open-capabilities/html-to-pptx/integration-notes')
+
+    const bestPracticesText = readFileSync(
+      'content/open-capabilities/html-to-pptx/best-practices.mdx',
+      'utf8'
+    )
+    expect(bestPracticesText).toContain('/open-capabilities/html-to-pptx/integration-notes')
   })
 
   it('supports multi-language API code examples with ApiCodeTabs and code fences', () => {

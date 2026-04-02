@@ -91,6 +91,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               pageMap={await getPageMap('')}
               footer={footer}
               banner={banner}
+              sidebar={{autoCollapse: true,defaultMenuCollapseLevel: 1}}
             >
               <main className="nextra-article-main relative z-10">{children}</main>
             </Layout>

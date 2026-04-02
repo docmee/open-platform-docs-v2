@@ -18,6 +18,7 @@ const withNextra = nextra({
 })
 
 export default withNextra({
+  basePath: '/docs-v2',
   images: {
     domains: ['oss.docmee.cn'],
     remotePatterns: [

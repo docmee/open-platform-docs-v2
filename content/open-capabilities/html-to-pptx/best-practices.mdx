@@ -6,19 +6,19 @@ title: '最佳实践'
 
 ## 请求前自检 HTML
 
-- 在业务侧提交前先校验每页是否包含 <InlineCode>.slide</InlineCode> 根元素。
-- 在业务侧统一页面宽高，避免混入非同尺寸页面。
+- 在业务侧提交前先校验每页是否包含 <InlineCode>.slide</InlineCode> 根元素，详细限制见 [❗限制条件](/open-capabilities/html-to-pptx/integration-notes)。
+- 在业务侧优先将 <InlineCode>.slide</InlineCode> 控制为 <InlineCode>1280 × 720</InlineCode>，并统一页面宽高，避免混入非同尺寸页面；尺寸规则见 [❗限制条件](/open-capabilities/html-to-pptx/integration-notes)。
 - 对生成后的 HTML 做基础渲染检查，避免明显缺失内容后再提交转换。
 
 ## 合理选择 pageErrorMode
 
-- 如果你的业务要求页数稳定，建议使用 <InlineCode>blank</InlineCode>。
-- 如果你的业务更关注只交付成功页面，建议使用 <InlineCode>skip</InlineCode>。
+- 如果你的业务要求页数稳定，建议使用 <InlineCode>blank</InlineCode>；参数限制见 [❗限制条件](/open-capabilities/html-to-pptx/integration-notes)。
+- 如果你的业务更关注只交付成功页面，建议使用 <InlineCode>skip</InlineCode>；参数限制见 [❗限制条件](/open-capabilities/html-to-pptx/integration-notes)。
 - 不要在未理解业务需求的情况下默认跳过失败页，否则可能造成用户误判“内容缺页”。
 
 ## 收到结果后立即转存
 
-- 收到 <InlineCode>fileUrl</InlineCode> 后立即下载或转存到自有对象存储。
+- 收到 <InlineCode>fileUrl</InlineCode> 后立即下载或转存到自有对象存储；文件命名和下载约束见 [❗限制条件](/open-capabilities/html-to-pptx/integration-notes)。
 - 不要把返回的 OSS 地址当作永久资源 URL 使用。
 - 业务需要归档时，应在收到响应后立刻完成持久化。
 

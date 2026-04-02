@@ -9,8 +9,8 @@ title: '快速开始'
 ## 第 1 步：准备请求
 
 - 确保已经获取可用的 <InlineCode>token</InlineCode> [获取Token](/api-reference/auth/create-api-token)
-- 确保每个 HTML 都包含 <InlineCode>.slide</InlineCode> 根元素
-- 确保所有 HTML 页面使用统一尺寸
+- 确保每个 HTML 都包含 <InlineCode>.slide</InlineCode> 根元素，详细限制见 [❗限制条件](/open-capabilities/html-to-pptx/integration-notes)
+- 确保 <InlineCode>.slide</InlineCode> 目标尺寸为 <InlineCode>1280 × 720</InlineCode>，并尽量让所有 HTML 页面保持统一尺寸，详细限制见 [❗限制条件](/open-capabilities/html-to-pptx/integration-notes)
 
 ## 第 2 步：发送最小请求
 
@@ -24,7 +24,8 @@ curl --request POST \
       "<div class=\"slide\" style=\"width:1280px;height:720px\"><h1>第一页</h1></div>",
       "<div class=\"slide\" style=\"width:1280px;height:720px\"><h1>第二页</h1></div>"
     ],
-    "pageErrorMode": "blank"
+    "pageErrorMode": "blank",
+    "filename": "季度经营汇报"
   }'
 ```
 
@@ -50,7 +51,8 @@ curl --request POST \
 
 - 当 <InlineCode>code = 0</InlineCode> 且存在 <InlineCode>fileUrl</InlineCode> 时，说明文件已经生成成功。
 - 收到 <InlineCode>fileUrl</InlineCode> 后应立即下载或转存。
-- 如果 <InlineCode>failedPages &gt; 0</InlineCode>，说明本次为部分成功，还需要检查 <InlineCode>failedPageDetails</InlineCode>。
+- 如果请求里传入 <InlineCode>filename: "季度经营汇报"</InlineCode>，最终下载文件名会按 <InlineCode>季度经营汇报.pptx</InlineCode> 处理；命名规则见 [❗限制条件](/open-capabilities/html-to-pptx/integration-notes)。
+- 如果 <InlineCode>failedPages &gt; 0</InlineCode>，说明本次为部分成功，还需要检查 <InlineCode>failedPageDetails</InlineCode>；失败页处理策略和命名规则都应结合 [❗限制条件](/open-capabilities/html-to-pptx/integration-notes) 一起理解。
 
 ## 下一步
 
