@@ -1,0 +1,373 @@
+---
+title: '事件回调'
+---
+
+# 事件回调
+
+新版 UI 接入既可以通过 <InlineCode>docmee.on(...)</InlineCode> 监听事件，也可以在脚本接入场景里通过 <InlineCode>onMessage</InlineCode> 统一接收事件消息。
+
+结合当前实现，iframe 向宿主页面抛出的消息类型包括：
+
+- `mounted`
+- `user-info`
+- `invalid-token`
+- `error`
+- `pageChange`
+- `toggleGenerateMode`
+- `beforeGenerate`
+- `outlineGenerated`
+- `beforeCreatePpt`
+- `charge`
+- `afterGenerate`
+- `beforeDownload`
+- `beforeCreateCustomTemplate`
+- `afterCreateCustomTemplate`
+- `manuallySavePPT`
+- `automaticSavePPT`
+- `currentPptInfo`
+- `changeSlideIndex`
+- `pptxRenamed`
+
+## 核心事件
+
+### mounted
+
+iframe 挂载完成后触发：
+
+```js
+{
+  type: 'mounted'
+}
+```
+
+### beforeGenerate
+
+用户开始生成前触发。你可以在这里做额度校验、风控或补充业务确认。
+
+```js
+{
+  type: 'beforeGenerate',
+  data: {
+    subtype: 'outline', // 或 'ppt'
+    fields: {}
+  }
+}
+```
+
+该事件允许返回：
+
+- `true`：继续生成
+- `false`：阻止生成
+- `Promise<boolean>`：异步决定是否继续
+
+### beforeCreatePpt
+
+新版 V2 在选完模板、真正开始生成 PPT 前，还会多触发一个拦截点：
+
+```js
+{
+  type: 'beforeCreatePpt',
+  data: {
+    taskId: 'task_xxx',
+    templateId: 'template_xxx',
+    outline: 'markdown content',
+    byCommand: true
+  }
+}
+```
+
+该事件同样支持返回 `true / false / Promise<boolean>`。从当前实现看，如果宿主侧没有及时回复，该拦截默认会在约 `500ms` 后放行。
+
+### pageChange
+
+页面切换时触发：
+
+```js
+{
+  type: 'pageChange',
+  data: {
+    page: 'creator'
+  }
+}
+```
+
+当前实际发送的 `page` 值可能包括：
+
+- `dashboard`
+- `editor`
+- `customTemplate`
+- `creator`
+- `creatorV2`
+- `templateCreator`
+- `templateMarker`
+
+### toggleGenerateMode
+
+创建页切换“主题生成 / 导入资料”以及资料子模式时触发：
+
+```js
+{
+  type: 'toggleGenerateMode',
+  data: {
+    mode: 'subject',
+    subMode: undefined
+  }
+}
+```
+
+其中 `subMode` 在资料模式下可能是：
+
+- `text`
+- `file`
+- `website`
+- `outline`
+
+### outlineGenerated
+
+当新版创建流程已经产出结构化大纲对象时触发：
+
+```js
+{
+  type: 'outlineGenerated',
+  data: {
+    outline: {}
+  }
+}
+```
+
+### beforeDownload
+
+下载前触发，可用于拦截权限，也可以返回自定义文件名：
+
+```js
+{
+  type: 'beforeDownload',
+  data: {
+    id: 'ppt_xxx',
+    subject: '季度经营汇报'
+  }
+}
+```
+
+该事件允许返回：
+
+- `true`：允许下载
+- `false`：阻止下载
+- `string`：自定义文件名，建议以 `.pptx` 结尾
+- `Promise<boolean | string>`：异步决定
+
+### charge
+
+PPT 生成完成并发生扣费时触发：
+
+```js
+{
+  type: 'charge',
+  data: {
+    id: 'ppt_xxx'
+  }
+}
+```
+
+### afterGenerate
+
+PPT 成功生成后触发：
+
+```js
+{
+  type: 'afterGenerate',
+  data: {
+    id: 'ppt_xxx'
+  }
+}
+```
+
+### error
+
+错误事件统一从这里接收：
+
+```js
+{
+  type: 'error',
+  data: {
+    code: 88,
+    message: '您的次数已用完，请开通会员'
+  }
+}
+```
+
+从当前实现看，`error.data` 有两种常见形态：
+
+- `{ code, message }`
+- `{ error }`
+
+### user-info
+
+获取当前用户额度和使用情况：
+
+```js
+{
+  type: 'user-info',
+  data: {
+    uid: 'user_xxx',
+    availableCount: 10,
+    usedCount: 2
+  }
+}
+```
+
+### invalid-token
+
+当 `token` 校验失败时触发：
+
+```js
+{
+  type: 'invalid-token'
+}
+```
+
+### beforeCreateCustomTemplate
+
+创建完整自定义模板前触发：
+
+```js
+{
+  type: 'beforeCreateCustomTemplate',
+  data: {
+    file: {},
+    totalPptCount: 99
+  }
+}
+```
+
+该事件支持返回 `true / false / Promise<boolean>`。
+
+### afterCreateCustomTemplate
+
+自定义模板创建或修改完成后触发：
+
+```js
+{
+  type: 'afterCreateCustomTemplate',
+  data: {
+    do: 'create_complex'
+  }
+}
+```
+
+### manuallySavePPT
+
+用户主动点击保存时触发：
+
+```js
+{
+  type: 'manuallySavePPT',
+  data: {
+    id: 'ppt_xxx',
+    name: '季度经营汇报',
+    templateId: 'template_xxx',
+    pptxProperty: {}
+  }
+}
+```
+
+### automaticSavePPT
+
+编辑器自动保存时触发：
+
+```js
+{
+  type: 'automaticSavePPT',
+  data: {
+    id: 'ppt_xxx',
+    name: '季度经营汇报',
+    templateId: 'template_xxx',
+    pptxProperty: {}
+  }
+}
+```
+
+### currentPptInfo
+
+宿主侧主动请求当前 PPT 信息后返回：
+
+```js
+{
+  type: 'currentPptInfo',
+  data: {
+    id: 'ppt_xxx',
+    name: '季度经营汇报',
+    templateId: 'template_xxx',
+    pptxProperty: {}
+  }
+}
+```
+
+### changeSlideIndex
+
+编辑器切换当前页时触发：
+
+```js
+{
+  type: 'changeSlideIndex',
+  data: {
+    slideIndex: 3,
+    pptId: 'ppt_xxx',
+    when: 'modify'
+  }
+}
+```
+
+其中 `when` 的可能值为：
+
+- `create`
+- `modify`
+
+### pptxRenamed
+
+PPT 被重命名后触发：
+
+```js
+{
+  type: 'pptxRenamed',
+  data: {
+    id: 'ppt_xxx',
+    name: '新的文件名'
+  }
+}
+```
+
+## 典型业务处理示例
+
+```typescript
+docmee.on('beforeGenerate', async ({ subtype, fields }) => {
+  const allowed = await fetch('/api/quota/check', {
+    method: 'POST',
+    body: JSON.stringify({ subtype, fields }),
+  }).then((res) => res.json())
+
+  return allowed.ok
+})
+
+docmee.on('beforeDownload', ({ subject }) => {
+  return `Docmee_${subject}.pptx`
+})
+
+docmee.on('error', ({ code, message }) => {
+  console.error(code, message)
+})
+```
+
+## 事件设计建议
+
+- 在 `beforeGenerate` 中做额度和风控判断，不要等生成后再回滚
+- 如果你需要在“选完模板但还没真正出 PPT”时做最后一次校验，拦截 `beforeCreatePpt`
+- 在 `beforeDownload` 中统一做命名规范和权限控制
+- 对 `error` 里的业务码做分类处理，尤其是次数耗尽、鉴权失效和参数错误
+- 需要感知编辑器内保存动作时，优先监听 `manuallySavePPT` 和 `automaticSavePPT`
+- 如果宿主侧要跟随编辑器页切换或标题变更，监听 `changeSlideIndex` 和 `pptxRenamed`
+
+## 下一步
+
+- 需要控制页面跳转和外部命令：看 [实例方法](/ui-integration/methods)
+- 需要补全初始化参数：看 [初始化参数](/ui-integration/configuration)

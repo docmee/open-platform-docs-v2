@@ -1,0 +1,121 @@
+---
+title: '快速开始'
+---
+
+# 快速开始
+
+## 最小接入步骤
+
+1. 服务端调用 [createApiToken](/api-reference/auth/create-api-token) 生成用户级 <InlineCode>token</InlineCode>
+2. 前端安装 <InlineCode>@docmee/sdk-ui</InlineCode>
+3. 在页面中实例化 <InlineCode>DocmeeUI</InlineCode>，并传入挂载容器、页面类型和 <InlineCode>token</InlineCode>
+4. 根据业务需要监听生成、跳页、下载和错误事件
+
+## NPM 方式接入
+
+```bash
+npm install @docmee/sdk-ui
+```
+
+### TypeScript 示例
+
+```typescript
+import { CreatorType, DocmeeUI } from '@docmee/sdk-ui'
+
+const docmee = new DocmeeUI({
+  container: 'app',
+  page: 'creator',
+  creatorVersion: 'v2',
+  token: 'your_token',
+  lang: 'zh',
+  mode: 'light',
+  creatorData: {
+    type: CreatorType.AI_GEN,
+    subject: 'AI 行业未来 10 年的发展预测',
+  },
+})
+
+docmee.on('mounted', () => {
+  console.log('UI mounted')
+})
+
+docmee.on('beforeGenerate', (payload) => {
+  console.log('beforeGenerate', payload)
+  return true
+})
+
+docmee.on('pageChange', (payload) => {
+  console.log('pageChange', payload)
+})
+```
+
+### JavaScript 浏览器示例
+
+如果你使用的是脚本方式接入，可以先引入打包后的 SDK，再实例化 <InlineCode>DocmeeUI</InlineCode>：
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Docmee UI Demo</title>
+    <script src="docmee-ui-sdk-iframe.min.js"></script>
+    <style>
+      html, body, #container {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+      const docmeeUI = new DocmeeUI({
+        container: document.querySelector('#container'),
+        page: 'creator',
+        creatorVersion: 'v2',
+        token: 'your_token',
+        lang: 'zh',
+        mode: 'light',
+      })
+
+      docmeeUI.onMessage = function (message) {
+        console.log(message)
+      }
+    </script>
+  </body>
+</html>
+```
+
+## 让创建页直接带入业务数据
+
+如果你希望用户打开页面后直接开始新版创建流程，可以传入 <InlineCode>creatorData</InlineCode>：
+
+```typescript
+import { CreatorType, DocmeeUI } from '@docmee/sdk-ui'
+
+const docmee = new DocmeeUI({
+  container: 'app',
+  page: 'creator',
+  creatorVersion: 'v2',
+  token: 'your_token',
+  creatorData: {
+    type: CreatorType.TEXT,
+    content: '请生成一份关于新能源车市场趋势的 10 页演示文稿',
+  },
+})
+```
+
+> 提示：新版接入中，当 <InlineCode>creator</InlineCode> 页面拿到足够的创作数据后，会直接开始生成流程。
+
+## 相关示例仓库
+
+- 新版 V2 UI： [docmee/aippt-ui-iframe-v2](https://github.com/docmee/aippt-ui-iframe-v2)
+- 旧版兼容参考： [docmee/aippt-ui-iframe](https://github.com/docmee/aippt-ui-iframe)
+
+## 下一步
+
+- 需要了解参数含义：看 [初始化参数](/ui-integration/configuration)
+- 需要和业务事件联动：看 [事件回调](/ui-integration/events)
+- 需要外部控制 UI：看 [实例方法](/ui-integration/methods)

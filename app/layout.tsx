@@ -1,4 +1,6 @@
+import { SidebarControlsBridge } from '@/components/layout/SidebarControlsBridge'
 import { DotPattern } from '@/components/ui/dot-pattern'
+import { HexagonPattern } from '@/components/ui/hexagon-pattern'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import type { Metadata } from 'next'
@@ -59,16 +61,34 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="zh-CN" dir="ltr" suppressHydrationWarning className={cn('font-sans', geist.variable)}>
       <Head />
-      <body>
+      <body className="relative min-h-screen overflow-x-hidden bg-background">
         <TooltipProvider>
-          <div className="w-full absolute h-[80vh] top-0 left-0">
-            <DotPattern
-              width={14}
-              height={14}
-              className={cn('mask-[radial-gradient(ellipse_at_top_center,white_10%,transparent_80%)] opacity-50')}
+          <div className="pointer-events-none inset-0 overflow-hidden" aria-hidden="true">
+            <div className="absolute left-0 top-0 h-[80vh] w-full">
+              <DotPattern
+                width={14}
+                height={14}
+                className={cn('mask-[radial-gradient(ellipse_at_top_center,white_10%,transparent_80%)] opacity-50')}
+              />
+            </div>
+            <HexagonPattern
+              radius={24}
+              gap={8}
+              hexagons={[
+                [2, 1],
+                [6, 2],
+                [4, 4],
+                [9, 3],
+              ]}
+              className={cn(
+                'inset-x-0 top-[6vh] bottom-auto h-[90vh] stroke-accent/20 fill-accent/8 opacity-60 mask-[radial-gradient(ellipse_at_top,white_18%,transparent_72%)]'
+              )}
+            />
+            <div
+              className="absolute inset-x-0 top-0 h-[55vh] bg-[radial-gradient(circle_at_top,hsl(var(--accent)/0.18),transparent_62%)]"
             />
           </div>
-          <div className="site-shell">
+          <div className="site-shell relative">
             <div
               className="fixed -bottom-40 -right-24 size-[65vh] opacity-15  bg-accent/50 rounded-full mask-[radial-gradient(circle_at_center,white_10%,transparent_40%)] pointer-events-none"
               aria-hidden="true"
@@ -93,6 +113,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               banner={banner}
               sidebar={{autoCollapse: true,defaultMenuCollapseLevel: 1}}
             >
+              <SidebarControlsBridge />
               <main className="nextra-article-main relative z-10">{children}</main>
             </Layout>
           </div>

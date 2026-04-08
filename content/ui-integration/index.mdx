@@ -1,0 +1,49 @@
+---
+title: '新版 UI 接入'
+---
+
+# 新版 UI 接入
+
+Docmee 提供基于 iframe 的 UI SDK，你可以把完整的 PPT 生成、模板选择、编辑和下载能力嵌入到自己的业务系统中。
+
+新版接入推荐使用 <InlineCode>@docmee/sdk-ui</InlineCode>，并明确指定 <InlineCode>creatorVersion: 'v2'</InlineCode>。相比旧版文档，当前接入方式更强调：
+
+- 通过服务端先调用 [createApiToken](/api-reference/auth/create-api-token) 获取用户级 <InlineCode>token</InlineCode>
+- 前端使用同一个 SDK 管理创建页、列表页、编辑页和自定义模板页
+- 使用 <InlineCode>creatorData</InlineCode> 直接带入外部数据时，按照新版创作类型传 <InlineCode>content</InlineCode>、<InlineCode>subject</InlineCode> 或 <InlineCode>file</InlineCode>
+- 当页面为 <InlineCode>creator</InlineCode> 且传入了可直接生成的数据时，V2 会自动开始生成流程
+
+## 适用场景
+
+- 在 SaaS、OA、CRM、教育或企业门户中内嵌完整的 AI PPT 工作台
+- 让业务系统直接打开 Docmee 的新建、列表或编辑体验
+- 基于业务上下文预填主题、资料、链接或文件，缩短用户操作路径
+- 在国际版或代理环境中统一复用一套前端嵌入方案
+
+## 推荐阅读顺序
+
+1. 先看 [快速开始](/ui-integration/quickstart) 跑通最小可用示例
+2. 再看 [初始化参数](/ui-integration/configuration) 明确页面、数据和代理配置
+3. 需要和业务权限、积分、下载流程联动时，再看 [事件回调](/ui-integration/events)
+4. 需要外部控制页面跳转、模板切换或重新注入数据时，再看 [实例方法](/ui-integration/methods)
+
+## 接入前准备
+
+- 服务端可以稳定调用 [createApiToken](/api-reference/auth/create-api-token) 生成用户隔离的 <InlineCode>token</InlineCode>
+- 前端页面使用 HTTP/HTTPS 运行，不要直接在 <InlineCode>file://</InlineCode> 协议下打开
+- 预先确认你的接入目标页是 <InlineCode>creator</InlineCode>、<InlineCode>dashboard</InlineCode>、<InlineCode>editor</InlineCode> 还是 <InlineCode>customTemplate</InlineCode>
+- 如果你使用国际版或自有反向代理，提前规划好 <InlineCode>DOMAIN</InlineCode> 和 <InlineCode>baseURL</InlineCode>
+
+## 从旧版文档迁移时最容易踩的点
+
+- V2 创作数据优先使用 <InlineCode>content</InlineCode>，不要继续把正文内容塞进 <InlineCode>text</InlineCode>
+- 传入 <InlineCode>creatorData</InlineCode> 后，V2 通常会直接进入生成链路，不再依赖旧版的 <InlineCode>createNow</InlineCode>
+- 如果要直接进入编辑页，必须同时提供 <InlineCode>page: 'editor'</InlineCode> 和 <InlineCode>pptId</InlineCode>
+- 国际版必须显式设置 <InlineCode>DOMAIN: 'https://app.xpptx.com'</InlineCode>
+
+## 下一步
+
+- 直接开始接入：阅读 [快速开始](/ui-integration/quickstart)
+- 配更多参数：阅读 [初始化参数](/ui-integration/configuration)
+- 和业务事件联动：阅读 [事件回调](/ui-integration/events)
+- 查询底层鉴权与生成接口：进入 [API 参考](/api-reference)

@@ -11,6 +11,11 @@ describe('docs center structure', () => {
 
   it('includes required content files', () => {
     expect(existsSync('content/index.mdx')).toBe(true)
+    expect(existsSync('content/ui-integration/index.mdx')).toBe(true)
+    expect(existsSync('content/ui-integration/quickstart.mdx')).toBe(true)
+    expect(existsSync('content/ui-integration/configuration.mdx')).toBe(true)
+    expect(existsSync('content/ui-integration/events.mdx')).toBe(true)
+    expect(existsSync('content/ui-integration/methods.mdx')).toBe(true)
     expect(existsSync('content/how-to-use/index.mdx')).toBe(true)
     expect(existsSync('content/getting-started/index.mdx')).toBe(true)
     expect(existsSync('content/getting-started/ail-ppt.mdx')).toBe(true)
@@ -24,9 +29,20 @@ describe('docs center structure', () => {
   it('defines Chinese navigation labels in root meta', () => {
     expect(existsSync('content/_meta.tsx')).toBe(true)
     const metaText = readFileSync('content/_meta.tsx', 'utf8')
+    expect(metaText).toContain("'ui-integration':")
+    expect(metaText).toContain('UI 接入')
     expect(metaText).toContain("'getting-started':")
     expect(metaText).toContain('快速开始')
     expect(metaText).toContain('API 参考')
+  })
+
+  it('places ui integration first in the top-level navbar order', () => {
+    const metaText = readFileSync('content/_meta.tsx', 'utf8')
+    expect(metaText.indexOf("'ui-integration':")).toBeGreaterThan(-1)
+    expect(metaText.indexOf("'getting-started':")).toBeGreaterThan(-1)
+    expect(metaText.indexOf("'ui-integration':")).toBeLessThan(
+      metaText.indexOf("'getting-started':")
+    )
   })
 
   it('registers the open capabilities top-level navigation entry', () => {
@@ -35,6 +51,60 @@ describe('docs center structure', () => {
     const rootMetaText = readFileSync('content/_meta.tsx', 'utf8')
     expect(rootMetaText).toContain("'open-capabilities':")
     expect(rootMetaText).toContain('开放能力')
+  })
+
+  it('documents the ui integration multi-page navigation', () => {
+    expect(existsSync('content/ui-integration/_meta.ts')).toBe(true)
+
+    const sectionMetaText = readFileSync('content/ui-integration/_meta.ts', 'utf8')
+    expect(sectionMetaText).toContain("index: '新版 UI 接入'")
+    expect(sectionMetaText).toContain("quickstart: '快速开始'")
+    expect(sectionMetaText).toContain("configuration: '初始化参数'")
+    expect(sectionMetaText).toContain("events: '事件回调'")
+    expect(sectionMetaText).toContain("methods: '实例方法'")
+  })
+
+  it('documents the new ui integration content', () => {
+    const indexText = readFileSync('content/ui-integration/index.mdx', 'utf8')
+    expect(indexText).toContain('@docmee/sdk-ui')
+    expect(indexText).toContain("creatorVersion: 'v2'")
+    expect(indexText).toContain('/ui-integration/quickstart')
+
+    const quickstartText = readFileSync('content/ui-integration/quickstart.mdx', 'utf8')
+    expect(quickstartText).toContain('npm install @docmee/sdk-ui')
+    expect(quickstartText).toContain("page: 'creator'")
+    expect(quickstartText).toContain("docmee.on('beforeGenerate'")
+
+    const configurationText = readFileSync(
+      'content/ui-integration/configuration.mdx',
+      'utf8'
+    )
+    expect(configurationText).toContain('createApiToken')
+    expect(configurationText).toContain("DOMAIN: 'https://app.xpptx.com'")
+    expect(configurationText).toContain('proxy_pass https://docmee.cn/api;')
+    expect(configurationText).toContain('baseURL')
+    expect(configurationText).toContain('templateMenu')
+    expect(configurationText).toContain('hideDashboardButton')
+    expect(configurationText).toContain('editorDisplay')
+    expect(configurationText).toContain('targetOrigin')
+
+    const eventsText = readFileSync('content/ui-integration/events.mdx', 'utf8')
+    expect(eventsText).toContain("type: 'beforeGenerate'")
+    expect(eventsText).toContain("type: 'beforeCreatePpt'")
+    expect(eventsText).toContain("type: 'beforeDownload'")
+    expect(eventsText).toContain("type: 'error'")
+    expect(eventsText).toContain("type: 'outlineGenerated'")
+    expect(eventsText).toContain("type: 'changeSlideIndex'")
+    expect(eventsText).toContain("type: 'pptxRenamed'")
+    expect(eventsText).toContain('Promise<boolean | string>')
+
+    const methodsText = readFileSync('content/ui-integration/methods.mdx', 'utf8')
+    expect(methodsText).toContain('updateToken(newToken: string)')
+    expect(methodsText).toContain("navigate({ page: 'editor', pptId: 'ppt_xxx' })")
+    expect(methodsText).toContain("docmee.sendMessage({")
+    expect(methodsText).toContain('continueCreatePpt')
+    expect(methodsText).toContain('changeSlidePageIndex')
+    expect(methodsText).toContain('reloadEditor')
   })
 
   it('includes the open capabilities structure files', () => {
@@ -118,7 +188,10 @@ describe('docs center structure', () => {
       'content/open-capabilities/html-to-pptx/pricing.mdx',
       'utf8'
     )
-    expect(pricingText).toContain('能力计费信息即将上线')
+    expect(pricingText).toContain('成功转换页数计费')
+    expect(pricingText).toContain('每一个成功转换的页面消耗 `0.3` 积分')
+    expect(pricingText).toContain('>= 50')
+    expect(pricingText).toContain('successPages')
 
     const quickstartText = readFileSync(
       'content/open-capabilities/html-to-pptx/quickstart.mdx',

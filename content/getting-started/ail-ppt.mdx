@@ -2,6 +2,746 @@
 title: 'AI 智能布局'
 ---
 
-# HTML 设计大师
+# 生成第一份 AI 智能布局 PPT
 
-该章节内容暂未开放。
+这一节只走一条最短路径：直接生成 `JSON` 结构化大纲，再调用 AIL 接口完成页面级智能布局。
+
+## 这条链路和模板模式有什么不同
+
+- 模板模式的核心输入是 `Markdown` 大纲
+- AI 智能布局的核心输入是 `JSON` 结构化大纲
+- AIL 返回的是分页 `HTML` 流和任务进度，适合边生成边展示、断流恢复和最终状态确认
+
+
+## 第 1 步：创建调用 Token
+
+先在服务端使用 `Api-Key` 调用 [`createApiToken`](/api-reference/auth/create-api-token)。
+
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch('https://docmee.cn/api/user/createApiToken', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Api-Key': 'YOUR_API_KEY'
+  },
+  body: JSON.stringify({
+    uid: 'demo-user',
+    limit: 10,
+    timeOfHours: 2
+  })
+})
+
+const result = await response.json()
+console.log(result)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
+
+response = requests.post(
+    'https://docmee.cn/api/user/createApiToken',
+    headers={
+        'Content-Type': 'application/json',
+        'Api-Key': 'YOUR_API_KEY'
+    },
+    json={
+        'uid': 'demo-user',
+        'limit': 10,
+        'timeOfHours': 2
+    }
+)
+
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
+
+import (
+  "bytes"
+  "fmt"
+  "io"
+  "net/http"
+)
+
+func main() {
+  body := []byte(`{"uid":"demo-user","limit":10,"timeOfHours":2}`)
+  req, _ := http.NewRequest("POST", "https://docmee.cn/api/user/createApiToken", bytes.NewBuffer(body))
+  req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Api-Key", "YOUR_API_KEY")
+
+  resp, _ := http.DefaultClient.Do(req)
+  defer resp.Body.Close()
+
+  data, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(data))
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class CreateApiTokenExample {
+  public static void main(String[] args) throws Exception {
+    String body = """
+      {
+        "uid": "demo-user",
+        "limit": 10,
+        "timeOfHours": 2
+      }
+      """;
+
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create("https://docmee.cn/api/user/createApiToken"))
+      .header("Content-Type", "application/json")
+      .header("Api-Key", "YOUR_API_KEY")
+      .POST(HttpRequest.BodyPublishers.ofString(body))
+      .build();
+
+    HttpResponse<String> response = HttpClient.newHttpClient()
+      .send(request, HttpResponse.BodyHandlers.ofString());
+
+    System.out.println(response.body());
+  }
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
+
+拿到返回的 `token` 后，后续请求都在 Header 中传入：
+
+```http
+token: YOUR_TEMP_TOKEN
+```
+
+## 第 2 步：创建生成任务
+
+调用 [`createTask`](/api-reference/v2/create-task) 创建任务。这里以 `type=1` 的智能生成为例。
+
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const formData = new FormData()
+formData.append('type', '1')
+formData.append('content', '请生成一份关于 AI 办公趋势的产品介绍 PPT')
+
+const response = await fetch('https://docmee.cn/api/ppt/v2/createTask', {
+  method: 'POST',
+  headers: {
+    token: 'YOUR_TEMP_TOKEN'
+  },
+  body: formData
+})
+
+const result = await response.json()
+console.log(result)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
+
+response = requests.post(
+    'https://docmee.cn/api/ppt/v2/createTask',
+    headers={'token': 'YOUR_TEMP_TOKEN'},
+    data={
+        'type': '1',
+        'content': '请生成一份关于 AI 办公趋势的产品介绍 PPT'
+    }
+)
+
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
+
+import (
+  "bytes"
+  "fmt"
+  "io"
+  "mime/multipart"
+  "net/http"
+)
+
+func main() {
+  var body bytes.Buffer
+  writer := multipart.NewWriter(&body)
+  writer.WriteField("type", "1")
+  writer.WriteField("content", "请生成一份关于 AI 办公趋势的产品介绍 PPT")
+  writer.Close()
+
+  req, _ := http.NewRequest("POST", "https://docmee.cn/api/ppt/v2/createTask", &body)
+  req.Header.Set("token", "YOUR_TEMP_TOKEN")
+  req.Header.Set("Content-Type", writer.FormDataContentType())
+
+  resp, _ := http.DefaultClient.Do(req)
+  defer resp.Body.Close()
+
+  data, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(data))
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class CreateTaskExample {
+  public static void main(String[] args) throws IOException, InterruptedException {
+    String boundary = "----DocmeeBoundary";
+    String body = "--" + boundary + "\\r\\n"
+      + "Content-Disposition: form-data; name=\\"type\\"\\r\\n\\r\\n1\\r\\n"
+      + "--" + boundary + "\\r\\n"
+      + "Content-Disposition: form-data; name=\\"content\\"\\r\\n\\r\\n请生成一份关于 AI 办公趋势的产品介绍 PPT\\r\\n"
+      + "--" + boundary + "--\\r\\n";
+
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create("https://docmee.cn/api/ppt/v2/createTask"))
+      .header("token", "YOUR_TEMP_TOKEN")
+      .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+      .POST(HttpRequest.BodyPublishers.ofString(body))
+      .build();
+
+    HttpResponse<String> response = HttpClient.newHttpClient()
+      .send(request, HttpResponse.BodyHandlers.ofString());
+
+    System.out.println(response.body());
+  }
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
+
+成功后会返回任务 `id`。
+
+## 第 3 步：生成 JSON 大纲
+
+调用 [`generateContent`](/api-reference/v2/generate-content) 为任务生成结构化大纲。AI 智能布局场景下，关键是把 `outlineType` 明确设为 `JSON`。
+
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch('https://docmee.cn/api/ppt/v2/generateContent', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    token: 'YOUR_TEMP_TOKEN'
+  },
+  body: JSON.stringify({
+    id: 'TASK_ID',
+    stream: true,
+    outlineType: 'JSON',
+    questionMode: false,
+    isNeedAsk: false,
+    length: 'medium',
+    scene: '产品介绍',
+    audience: '客户',
+    lang: 'zh',
+    prompt: '语气专业，适合演示'
+  })
+})
+
+const result = await response.text()
+console.log(result)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
+
+response = requests.post(
+    'https://docmee.cn/api/ppt/v2/generateContent',
+    headers={
+        'Content-Type': 'application/json',
+        'token': 'YOUR_TEMP_TOKEN'
+    },
+    json={
+        'id': 'TASK_ID',
+        'stream': True,
+        'outlineType': 'JSON',
+        'questionMode': False,
+        'isNeedAsk': False,
+        'length': 'medium',
+        'scene': '产品介绍',
+        'audience': '客户',
+        'lang': 'zh',
+        'prompt': '语气专业，适合演示'
+    }
+)
+
+print(response.text)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
+
+import (
+  "bytes"
+  "fmt"
+  "io"
+  "net/http"
+)
+
+func main() {
+  body := []byte(`{"id":"TASK_ID","stream":true,"outlineType":"JSON","questionMode":false,"isNeedAsk":false,"length":"medium","scene":"产品介绍","audience":"客户","lang":"zh","prompt":"语气专业，适合演示"}`)
+  req, _ := http.NewRequest("POST", "https://docmee.cn/api/ppt/v2/generateContent", bytes.NewBuffer(body))
+  req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("token", "YOUR_TEMP_TOKEN")
+
+  resp, _ := http.DefaultClient.Do(req)
+  defer resp.Body.Close()
+
+  data, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(data))
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class GenerateContentExample {
+  public static void main(String[] args) throws Exception {
+    String body = """
+      {
+        "id": "TASK_ID",
+        "stream": true,
+        "outlineType": "JSON",
+        "questionMode": false,
+        "isNeedAsk": false,
+        "length": "medium",
+        "scene": "产品介绍",
+        "audience": "客户",
+        "lang": "zh",
+        "prompt": "语气专业，适合演示"
+      }
+      """;
+
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create("https://docmee.cn/api/ppt/v2/generateContent"))
+      .header("Content-Type", "application/json")
+      .header("token", "YOUR_TEMP_TOKEN")
+      .POST(HttpRequest.BodyPublishers.ofString(body))
+      .build();
+
+    HttpResponse<String> response = HttpClient.newHttpClient()
+      .send(request, HttpResponse.BodyHandlers.ofString());
+
+    System.out.println(response.body());
+  }
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
+
+流式响应结束时会返回完整结果。你需要从最终响应里取出 `result` 字段，作为下一步 AIL 的 `data` 输入。
+
+## 第 4 步：发起 AIL 智能布局任务
+
+把任务 ID 和上一步拿到的 `JSON` 大纲传给 [`generatePptxByAi`](/api-reference/v2/generate-pptx-by-ai)。如果你有模板约束，可以同时传 `templateId`；如果需要上传自定义模板，也可以传 `customTemplate`。
+
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const outline = {
+  title: 'AI 办公趋势',
+  children: [
+    {
+      title: '行业背景',
+      children: [
+        {
+          title: 'AI 办公为什么正在加速落地',
+          points: ['效率提升', '协作升级', '知识复用']
+        }
+      ]
+    }
+  ]
+}
+
+const formData = new FormData()
+formData.append('id', 'TASK_ID')
+formData.append('templateId', 'TEMPLATE_ID')
+formData.append('data', JSON.stringify(outline))
+
+const response = await fetch('https://docmee.cn/api/ppt/v2/generatePptxByAi', {
+  method: 'POST',
+  headers: {
+    token: 'YOUR_TEMP_TOKEN'
+  },
+  body: formData
+})
+
+const result = await response.text()
+console.log(result)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import json
+import requests
+
+outline = {
+    'title': 'AI 办公趋势',
+    'children': [
+        {
+            'title': '行业背景',
+            'children': [
+                {
+                    'title': 'AI 办公为什么正在加速落地',
+                    'points': ['效率提升', '协作升级', '知识复用']
+                }
+            ]
+        }
+    ]
+}
+
+response = requests.post(
+    'https://docmee.cn/api/ppt/v2/generatePptxByAi',
+    headers={'token': 'YOUR_TEMP_TOKEN'},
+    data={
+        'id': 'TASK_ID',
+        'templateId': 'TEMPLATE_ID',
+        'data': json.dumps(outline, ensure_ascii=False)
+    }
+)
+
+print(response.text)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
+
+import (
+  "bytes"
+  "fmt"
+  "io"
+  "mime/multipart"
+  "net/http"
+)
+
+func main() {
+  outline := `{"title":"AI 办公趋势","children":[{"title":"行业背景","children":[{"title":"AI 办公为什么正在加速落地","points":["效率提升","协作升级","知识复用"]}]}]}`
+
+  var body bytes.Buffer
+  writer := multipart.NewWriter(&body)
+  writer.WriteField("id", "TASK_ID")
+  writer.WriteField("templateId", "TEMPLATE_ID")
+  writer.WriteField("data", outline)
+  writer.Close()
+
+  req, _ := http.NewRequest("POST", "https://docmee.cn/api/ppt/v2/generatePptxByAi", &body)
+  req.Header.Set("token", "YOUR_TEMP_TOKEN")
+  req.Header.Set("Content-Type", writer.FormDataContentType())
+
+  resp, _ := http.DefaultClient.Do(req)
+  defer resp.Body.Close()
+
+  data, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(data))
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class GeneratePptxByAiExample {
+  public static void main(String[] args) throws IOException, InterruptedException {
+    String boundary = "----DocmeeBoundary";
+    String outline = """
+      {"title":"AI 办公趋势","children":[{"title":"行业背景","children":[{"title":"AI 办公为什么正在加速落地","points":["效率提升","协作升级","知识复用"]}]}]}
+      """;
+
+    String body = "--" + boundary + "\\r\\n"
+      + "Content-Disposition: form-data; name=\\"id\\"\\r\\n\\r\\nTASK_ID\\r\\n"
+      + "--" + boundary + "\\r\\n"
+      + "Content-Disposition: form-data; name=\\"templateId\\"\\r\\n\\r\\nTEMPLATE_ID\\r\\n"
+      + "--" + boundary + "\\r\\n"
+      + "Content-Disposition: form-data; name=\\"data\\"\\r\\n\\r\\n" + outline + "\\r\\n"
+      + "--" + boundary + "--\\r\\n";
+
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create("https://docmee.cn/api/ppt/v2/generatePptxByAi"))
+      .header("token", "YOUR_TEMP_TOKEN")
+      .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+      .POST(HttpRequest.BodyPublishers.ofString(body))
+      .build();
+
+    HttpResponse<String> response = HttpClient.newHttpClient()
+      .send(request, HttpResponse.BodyHandlers.ofString());
+
+    System.out.println(response.body());
+  }
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
+
+这个接口会以 `SSE` 形式持续返回两类消息：
+
+- 过程消息：当前步骤、分页任务和整体进度
+- 页面增量消息：某一页 `HTML` 的流式增量内容
+
+如果连接持续正常，前端可以一边收流，一边实时渲染页面。
+
+## 第 5 步：连接异常时恢复最新页面数据
+
+如果 AIL 流中断，可以调用 [`latestData`](/api-reference/v2/latest-data) 拉取当前任务已经生成出的分页 `HTML`。
+
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch(
+  'https://docmee.cn/api/ppt/v2/latestData?taskId=TASK_ID&from=0',
+  {
+    headers: {
+      token: 'YOUR_TEMP_TOKEN'
+    }
+  }
+)
+
+const result = await response.json()
+console.log(result)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
+
+response = requests.get(
+    'https://docmee.cn/api/ppt/v2/latestData',
+    headers={'token': 'YOUR_TEMP_TOKEN'},
+    params={'taskId': 'TASK_ID', 'from': 0}
+)
+
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
+
+import (
+  "fmt"
+  "io"
+  "net/http"
+)
+
+func main() {
+  req, _ := http.NewRequest("GET", "https://docmee.cn/api/ppt/v2/latestData?taskId=TASK_ID&from=0", nil)
+  req.Header.Set("token", "YOUR_TEMP_TOKEN")
+
+  resp, _ := http.DefaultClient.Do(req)
+  defer resp.Body.Close()
+
+  data, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(data))
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class LatestDataExample {
+  public static void main(String[] args) throws Exception {
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create("https://docmee.cn/api/ppt/v2/latestData?taskId=TASK_ID&from=0"))
+      .header("token", "YOUR_TEMP_TOKEN")
+      .GET()
+      .build();
+
+    HttpResponse<String> response = HttpClient.newHttpClient()
+      .send(request, HttpResponse.BodyHandlers.ofString());
+
+    System.out.println(response.body());
+  }
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
+
+这个接口的核心价值是：
+
+- 补齐 SSE 期间漏掉的页面数据
+- 判断任务当前执行到哪一步
+- 在恢复成功后继续展示已经生成出的页面
+
+## 第 6 步：确认最终转换状态
+
+当你已经拿到全部页面 `HTML` 后，继续调用 [`getConvertResult`](/api-reference/v2/get-convert-result) 轮询最终转换状态。只有状态变成 `COMPLETED`，这一轮 AI 智能布局任务才算真正结束。
+
+<ApiCodeTabs items={['Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```js
+const response = await fetch(
+  'https://docmee.cn/api/ppt/v2/getConvertResult?taskId=TASK_ID',
+  {
+    headers: {
+      token: 'YOUR_TEMP_TOKEN'
+    }
+  }
+)
+
+const result = await response.json()
+console.log(result)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
+
+response = requests.get(
+    'https://docmee.cn/api/ppt/v2/getConvertResult',
+    headers={'token': 'YOUR_TEMP_TOKEN'},
+    params={'taskId': 'TASK_ID'}
+)
+
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
+
+import (
+  "fmt"
+  "io"
+  "net/http"
+)
+
+func main() {
+  req, _ := http.NewRequest("GET", "https://docmee.cn/api/ppt/v2/getConvertResult?taskId=TASK_ID", nil)
+  req.Header.Set("token", "YOUR_TEMP_TOKEN")
+
+  resp, _ := http.DefaultClient.Do(req)
+  defer resp.Body.Close()
+
+  data, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(data))
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class GetConvertResultExample {
+  public static void main(String[] args) throws Exception {
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create("https://docmee.cn/api/ppt/v2/getConvertResult?taskId=TASK_ID"))
+      .header("token", "YOUR_TEMP_TOKEN")
+      .GET()
+      .build();
+
+    HttpResponse<String> response = HttpClient.newHttpClient()
+      .send(request, HttpResponse.BodyHandlers.ofString());
+
+    System.out.println(response.body());
+  }
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>
+
+常见状态值如下：
+
+- `0`：等待处理
+- `1`：处理中
+- `2`：处理完成
+- `3`：处理失败
+
+## 一次完整闭环
+
+把整条链路压缩成一组最小调用，就是：
+
+1. `createApiToken`
+2. `createTask`
+3. `generateContent`，并传 `outlineType=JSON`
+4. `generatePptxByAi`
+5. 断流时调用 `latestData`
+6. 最终调用 `getConvertResult`，直到状态为 `2`
+
+## 相关 API
+
+- [`generateContent`](/api-reference/v2/generate-content)
+- [`generatePptxByAi`](/api-reference/v2/generate-pptx-by-ai)
+- [`latestData`](/api-reference/v2/latest-data)
+- [`getConvertResult`](/api-reference/v2/get-convert-result)

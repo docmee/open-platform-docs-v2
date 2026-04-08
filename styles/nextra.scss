@@ -1,12 +1,13 @@
-html:root {
+html:root,
+html:host {
   --x-spacing: 0.35rem;
-  // --x-text-base: 0.875rem;
+  --x-text-base: 0.925rem;
   --font-sans: "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", "SF Mono", Consolas, monospace;
-  --docs-bg: #fdfdfd;
+  --docs-bg: #rgb(253, 253, 253);
   --docs-surface: rgba(245, 245, 245, 0.82);
   --docs-surface-strong: #ffffff;
-  --docs-text: #181427;
+  --docs-text: #29292a;
   --docs-text-soft: #5f5976;
   --docs-border: rgba(103, 80, 164, 0.12);
   --docs-border-strong: rgba(103, 80, 164, 0.18);
@@ -26,7 +27,12 @@ html:root {
   --nextra-navbar-height: 72px;
   --nextra-content-width: 92rem;
   --x-color-gray-100: #f8f7fc;
-  --nextra-content-width: 102rem
+  --nextra-content-width: 102rem;
+  --x-text-4xl: 1.875rem;
+  --x-text-3xl: 1.325rem;
+  --x-text-2xl: 1.15rem;
+  --x-text-xl: 1rem;
+
 }
 
 
@@ -188,6 +194,260 @@ samp {
   }
 }
 
+[data-docmee-sidebar-controls='true'] {
+  margin: 0;
+}
+
+.nextra-sidebar {
+  position: sticky !important;
+}
+
+.nextra-sidebar>.nextra-sidebar-footer {
+  order: -1;
+  position: static !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin: -0.5rem .75rem 0 !important;
+  padding: 0rem 0.75rem 0 0.75rem !important;
+  border-top: 0 !important;
+  background: transparent !important;
+  pointer-events: auto;
+}
+
+.nextra-sidebar>.nextra-sidebar-footer> :not(button[aria-expanded]) {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  visibility: hidden !important;
+}
+
+.nextra-sidebar button[title='Change theme'] {
+  display: none !important;
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded] {
+  position: static !important;
+  margin-left: 0;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0 !important;
+  border: 1px solid rgba(15, 23, 42, 0.06) !important;
+  border-radius: 0.75rem !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+  color: var(--docs-text) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(12px);
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded]:hover {
+  border-color: rgba(170, 75, 252, 0.18) !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: var(--docs-text) !important;
+  transform: translateY(-1px);
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded]:active {
+  transform: translateY(0);
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded]:focus-visible {
+  outline: none;
+  border-color: rgba(170, 75, 252, 0.34) !important;
+  box-shadow: none !important;
+  outline: 3px solid rgba(170, 75, 252, 0.14);
+  outline-offset: 2px;
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded]>svg {
+  width: 1rem;
+  height: 1rem;
+  overflow: visible;
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded]>svg path:first-child {
+  opacity: 0.92;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded]>svg path:last-child {
+  opacity: 0.32;
+  transition: opacity 0.18s ease;
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded='true']>svg {
+  transform: scale(0.98);
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded='true']>svg path:first-child {
+  opacity: 0.78;
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded='true']>svg path:last-child {
+  opacity: 0.4;
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded='false']>svg {
+  transform: scale(1.04);
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded='false']>svg path:first-child {
+  opacity: 1;
+}
+
+.nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded='false']>svg path:last-child {
+  opacity: 0.24;
+}
+
+.docmee-sidebar-controls-shell {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.docmee-theme-switch {
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.docmee-theme-switch:hover {
+  background: rgba(15, 23, 42, 0.06);
+  box-shadow: none;
+  transform: none;
+}
+
+.docmee-sidebar-theme-anchor {
+  position: absolute;
+  left: 1rem;
+  bottom: 1.5rem;
+  pointer-events: auto;
+  z-index: 3;
+}
+
+.docmee-theme-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 3rem;
+  height: 1.75rem;
+  padding: 0.12rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.058);
+  color: var(--docs-text);
+  box-shadow: none;
+}
+
+.docmee-theme-switch-track {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 3rem;
+  height: 1.75rem;
+  margin: -0.12rem;
+  padding: 0.12rem;
+}
+
+.docmee-theme-switch-thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.16);
+  transition:
+    transform 0.22s ease,
+    background-color 0.22s ease,
+    color 0.22s ease;
+}
+
+.docmee-theme-switch[aria-checked='true'] {
+  background: rgba(170, 75, 252, 0.26);
+}
+
+.docmee-theme-switch[aria-checked='true'] .docmee-theme-switch-track {
+  justify-content: flex-end;
+}
+
+.docmee-theme-switch[aria-checked='true'] .docmee-theme-switch-thumb {
+  background: rgba(24, 24, 27, 0.96);
+  color: #c4b5fd;
+}
+
+.dark {
+  .nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded] {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    background: rgba(15, 23, 42, 0.72) !important;
+    color: rgba(248, 250, 252, 0.96) !important;
+    box-shadow: none !important;
+  }
+
+  .nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded]:hover,
+  .docmee-theme-switch {
+    border-color: rgba(255, 255, 255, 0.08);
+    color: rgba(248, 250, 252, 0.96);
+  }
+
+  .nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded]:hover,
+  .docmee-theme-switch:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded]:focus-visible {
+    border-color: rgba(192, 132, 252, 0.4) !important;
+    box-shadow: none !important;
+    outline: 3px solid rgba(168, 85, 247, 0.18);
+  }
+
+  .nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded]>svg path:last-child {
+    opacity: 0.42;
+  }
+
+  .nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded='false']>svg path:last-child {
+    opacity: 0.32;
+  }
+
+  .docmee-theme-switch {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: none;
+  }
+
+  .docmee-theme-switch[aria-checked='true'] {
+    background: rgba(168, 85, 247, 0.32);
+  }
+
+  .docmee-theme-switch-thumb {
+    background: rgba(255, 255, 255, 0.96);
+    color: #fbbf24;
+  }
+}
+
 
 
 article.nextra-body-typesetting-article {
@@ -264,10 +524,10 @@ article.nextra-body-typesetting-article {
 
 .nextra-code>pre {
   outline: none;
-  border: 1px solid var(--docs-code-border);
-  border-radius: var(--docs-radius-sm);
-  background: #fbfbfb !important;
-  box-shadow: 0 0 0 1px var(--docs-code-border);
+  // border: 1px solid var(--docs-code-border);
+  border-radius: var(--docs-radius-md);
+  background: rgb(241, 241, 241) !important;
+  box-shadow: 0 0 0 2px var(--docs-code-border), 0px 0px 3px 3px rgba(111, 111, 111, 0.08);
   padding: 0.8rem 0.5rem !important;
 
   &:where(.dark *) {
@@ -710,6 +970,7 @@ table {
 
 article {
   margin-top: 1.725rem;
+
 
   a {
     border-radius: var(--docs-radius-sm);

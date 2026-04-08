@@ -1,0 +1,185 @@
+---
+title: '实例方法'
+---
+
+# 实例方法
+
+以下方法都属于 <InlineCode>DocmeeUI</InlineCode> 实例成员，通常通过 <InlineCode>docmee.xxx()</InlineCode> 调用。
+
+## 常用方法一览
+
+- `updateToken(newToken: string)`：更新用户 Token
+- `destroy()`：卸载 iframe
+- `getInfo()`：主动拉取一次用户信息，结果会通过事件返回
+- `navigate({ page, pptId, templateId })`：在创建页、列表页、编辑页和自定义模板页之间跳转
+- `sendMessage({ type, content })`：向 SDK 发送提示消息
+- `changeCreatorData(data, createNow?)`：在创建页中动态修改输入内容
+- `updateTemplate(templateId)`：外部指定切换模板并刷新
+- `showTemplateDialog(type?)`：弹出模板选择弹窗
+- `getCurrentPptInfo()`：主动获取当前 PPT 信息
+- `importCSS(css)`：运行时追加 CSS
+- `continueCreatePpt()`：宿主侧确认后继续创建 PPT
+- `changeSlidePageIndex(pageIndex)`：外部切换到指定页
+- `changeSubjectContent(content)`：修改创建页主题/正文输入
+- `submitNewCreator()`：触发新版创建器提交
+- `reloadEditor()`：重新加载当前编辑器数据
+
+## 页面跳转
+
+```typescript
+docmee.navigate({ page: 'dashboard' })
+docmee.navigate({ page: 'creator' })
+docmee.navigate({ page: 'editor', pptId: 'ppt_xxx' })
+docmee.navigate({ page: 'templateMarker', templateId: 'template_xxx' })
+```
+
+注意：
+
+- 跳到 `editor` 时必须传 `pptId`
+- 跳到 `templateMarker` 时应传 `templateId`
+- 如果你的业务里存在多标签或路由切换，建议在页面卸载时调用 `destroy()`
+
+## 更新 Token
+
+当业务侧重新签发了用户 Token，可以无刷新更新：
+
+```typescript
+docmee.updateToken('new_token')
+```
+
+这通常用于：
+
+- 用户重新登录
+- 旧 Token 过期后服务端下发新 Token
+- 同一前端容器内切换登录身份
+
+## 外部注入创作数据
+
+```typescript
+docmee.changeCreatorData(
+  {
+    subject: 'AI 办公趋势'
+  },
+  true
+)
+```
+
+旧版写法里常见的是 `subject` / `text` 二选一；如果你已经切到新版 V2 链路，建议优先在初始化阶段直接通过 [初始化参数](/ui-integration/configuration) 中的 `creatorData` 注入数据。
+
+## 给 SDK 发送业务提示
+
+```typescript
+docmee.sendMessage({
+  type: 'success',
+  content: '配额校验通过，继续生成'
+})
+```
+
+常见 `type` 包括：
+
+- `success`
+- `error`
+- `warning`
+- `info`
+
+## 模板相关方法
+
+```typescript
+docmee.updateTemplate('template_xxx')
+docmee.showTemplateDialog('system')
+docmee.showTemplateDialog('custom')
+```
+
+这些方法适合在业务侧自定义“换模板”按钮或在外部流程里强制指定模板。
+
+## 高级控制命令
+
+从当前 iframe 通信实现看，宿主侧还可以向内层 UI 发送一组更底层的控制命令。是否暴露为 SDK 实例方法，取决于你使用的封装版本；如果你做的是自定义桥接，可以按以下语义理解：
+
+### getInfo
+
+主动请求一次用户信息，结果会通过 `user-info` 事件返回。
+
+### importCSS
+
+运行时追加样式：
+
+```typescript
+docmee.importCSS?.('https://example.com/docmee-overrides.css')
+```
+
+也可以直接传 CSS 字符串。
+
+### continueCreatePpt
+
+当你在 `beforeCreatePpt` 中先拦截了创建动作，后续可以继续放行：
+
+```typescript
+docmee.continueCreatePpt?.()
+```
+
+### changeSlidePageIndex
+
+外部切换编辑器当前页：
+
+```typescript
+docmee.changeSlidePageIndex?.(3)
+```
+
+### changeSubjectContent
+
+修改新版创建页当前输入：
+
+```typescript
+docmee.changeSubjectContent?.('请生成一份新的产品介绍 PPT')
+```
+
+### submitNewCreator
+
+直接触发新版创建器提交：
+
+```typescript
+docmee.submitNewCreator?.()
+```
+
+### reloadEditor
+
+重新拉取当前 PPT 的编辑器数据：
+
+```typescript
+docmee.reloadEditor?.()
+```
+
+## 底层消息桥接语义
+
+如果你不通过 SDK 实例方法，而是自己封装 `postMessage`，当前桥接层实际处理的宿主侧消息类型包括：
+
+- `message`
+- `getInfo`
+- `transParams`
+- `nav`
+- `changeTemplateById`
+- `showTemplateDialog`
+- `getCurrentPptInfo`
+- `importCSS`
+- `continueCreatePpt`
+- `changeSlidePageIndex`
+- `changeSubjectContent`
+- `submitNewCreator`
+- `reloadEditor`
+
+## 建议的生命周期管理
+
+```typescript
+const docmee = new DocmeeUI({
+  container: 'app',
+  page: 'creator',
+  token: 'your_token',
+})
+
+window.addEventListener('beforeunload', () => {
+  docmee.destroy()
+})
+```
+
+如果你在 React、Vue 或其他 SPA 中使用，建议在组件卸载钩子里做同样处理。

@@ -1,0 +1,252 @@
+---
+title: 'AI 智能布局排版'
+---
+
+# AI 智能布局排版
+
+## 接口信息
+
+- 方法：<HttpMethodBadge method="POST" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/ppt/v2/generatePptxByAi">https://open.docmee.cn/api/ppt/v2/generatePptxByAi</InlineCode>
+- 鉴权：请求头传 `token`
+- 请求体：<InlineCode>multipart/form-data</InlineCode>
+
+## 接口作用
+
+根据任务 ID 和 `JSON` 结构化大纲发起 AIL 智能布局任务，按页流式生成 `HTML` 结果。
+
+<ImportantNote title="返回方式">
+  <p>
+    该接口返回 <strong>SSE 流</strong>，不是一次性完整 JSON。调用方需要能够持续消费事件流，并在连接异常时配合
+    <InlineCode>latestData</InlineCode> 做恢复。
+  </p>
+</ImportantNote>
+
+## 请求示例
+
+```bash
+curl --request POST \
+  --url https://open.docmee.cn/api/ppt/v2/generatePptxByAi \
+  --header "token: YOUR_TEMP_TOKEN" \
+  --form "id=task_xxx" \
+  --form "templateId=template_xxx" \
+  --form-string 'data={"title":"AI 办公趋势","children":[{"title":"行业背景","children":[{"title":"AI 办公为什么正在加速落地","points":["效率提升","协作升级","知识复用"]}]}]}'
+```
+
+## 请求参数
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `id` | `string` | 是 | `task_xxx` | 任务 ID，来自 [`createTask`](/api-reference/v2/create-task)。 |
+| `data` | `string` | 是 | `{"title":"AI 办公趋势","children":[...]}` | `JSON` 结构化大纲，通常来自 [`generateContent`](/api-reference/v2/generate-content) 且 `outlineType=JSON` 时的最终 `result`。 |
+| `templateId` | `string` | 否 | `template_xxx` | 模板 ID，用于给 AIL 增加模板约束。 |
+| `customTemplate` | `File` | 否 | `custom-template.pptx` | 自定义模板文件。上传后会作为当前排版任务的模板约束。 |
+
+## 参数说明
+
+- `data` 需要是完整的结构化大纲对象，不建议传未完成的流式片段。
+- 如果同时有 `templateId` 和 `customTemplate`，应以你的业务约定为准，通常只传一种模板约束。
+- 该接口的直接输出是分页 `HTML` 与任务进度，不是最终下载链接。
+
+## 响应方式
+
+- `Content-Type: text/event-stream`
+- 持续返回 `data: {...}` 分片
+- 分片主要分为两类：过程消息和页面增量消息
+
+## 响应示例
+
+```text
+data: {"status":"running","step":1,"todo":[["completed","解析大纲"],["running","生成页面"]],"payload":{"ailOutline":[{"page_type":"cover","title":"AI 办公趋势"}]}}
+
+data: {"$":"<section class=\"page cover\">","_i":0,"_retry":false}
+
+data: {"$":"<h1>AI 办公趋势</h1></section>","_i":0,"_done":true,"_retry":false}
+
+data: {"status":"completed","step":3,"todo":[["completed","解析大纲"],["completed","生成页面"]],"payload":{"pages":{"0":"done"}}}
+```
+
+## 响应字段说明
+
+### 过程消息
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `data.status` | `string` | `running` | 任务状态，可取 `not_started`、`running`、`completed`、`error`。 |
+| `data.step` | `number` | `1` | 当前执行步骤。 |
+| `data.todo` | `array` | `[["running","生成页面"]]` | 任务待办及状态列表。 |
+| `data.payload.ailOutline` | `array` | `[{"page_type":"cover","title":"AI 办公趋势"}]` | AIL 识别出的页面级大纲摘要。 |
+| `data.payload.pages` | `object` | `{"0":"done"}` | 当前页面生成状态映射。 |
+| `data.payload.url` | `string` | `https://example.com/...` | 可选资源地址。 |
+
+### 页面增量消息
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `data.$` | `string` | `<section class=\"page cover\">` | 当前页的 `HTML` 增量内容。 |
+| `data._i` | `number` | `0` | 页索引。 |
+| `data._done` | `boolean` | `true` | 当前页是否已经生成完成。 |
+| `data._error` | `string` | `render failed` | 当前页生成失败时的错误信息。 |
+| `data._retry` | `boolean` | `false` | 当前页是否会自动重试。 |
+
+## 多语言示例
+
+<ApiCodeTabs items={['cURL', 'Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```bash
+curl --request POST \
+  --url https://open.docmee.cn/api/ppt/v2/generatePptxByAi \
+  --header "token: YOUR_TEMP_TOKEN" \
+  --form "id=task_xxx" \
+  --form "templateId=template_xxx" \
+  --form-string 'data={"title":"AI 办公趋势","children":[{"title":"行业背景","children":[{"title":"AI 办公为什么正在加速落地","points":["效率提升","协作升级","知识复用"]}]}]}'
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```js
+const outline = {
+  title: 'AI 办公趋势',
+  children: [
+    {
+      title: '行业背景',
+      children: [
+        {
+          title: 'AI 办公为什么正在加速落地',
+          points: ['效率提升', '协作升级', '知识复用']
+        }
+      ]
+    }
+  ]
+}
+
+const formData = new FormData()
+formData.append('id', 'TASK_ID')
+formData.append('templateId', 'TEMPLATE_ID')
+formData.append('data', JSON.stringify(outline))
+
+const response = await fetch('https://open.docmee.cn/api/ppt/v2/generatePptxByAi', {
+  method: 'POST',
+  headers: {
+    token: 'YOUR_TEMP_TOKEN'
+  },
+  body: formData
+})
+
+console.log(await response.text())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import json
+import requests
+
+outline = {
+    'title': 'AI 办公趋势',
+    'children': [
+        {
+            'title': '行业背景',
+            'children': [
+                {
+                    'title': 'AI 办公为什么正在加速落地',
+                    'points': ['效率提升', '协作升级', '知识复用']
+                }
+            ]
+        }
+    ]
+}
+
+response = requests.post(
+    'https://open.docmee.cn/api/ppt/v2/generatePptxByAi',
+    headers={'token': 'YOUR_TEMP_TOKEN'},
+    data={
+        'id': 'TASK_ID',
+        'templateId': 'TEMPLATE_ID',
+        'data': json.dumps(outline, ensure_ascii=False)
+    }
+)
+
+print(response.text)
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
+
+import (
+  "bytes"
+  "fmt"
+  "io"
+  "mime/multipart"
+  "net/http"
+)
+
+func main() {
+  outline := `{"title":"AI 办公趋势","children":[{"title":"行业背景","children":[{"title":"AI 办公为什么正在加速落地","points":["效率提升","协作升级","知识复用"]}]}]}`
+
+  var body bytes.Buffer
+  writer := multipart.NewWriter(&body)
+  writer.WriteField("id", "TASK_ID")
+  writer.WriteField("templateId", "TEMPLATE_ID")
+  writer.WriteField("data", outline)
+  writer.Close()
+
+  req, _ := http.NewRequest("POST", "https://open.docmee.cn/api/ppt/v2/generatePptxByAi", &body)
+  req.Header.Set("token", "YOUR_TEMP_TOKEN")
+  req.Header.Set("Content-Type", writer.FormDataContentType())
+
+  resp, _ := http.DefaultClient.Do(req)
+  defer resp.Body.Close()
+  data, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(data))
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class GeneratePptxByAiExample {
+  public static void main(String[] args) throws IOException, InterruptedException {
+    String boundary = "----DocmeeBoundary";
+    String outline = """
+      {"title":"AI 办公趋势","children":[{"title":"行业背景","children":[{"title":"AI 办公为什么正在加速落地","points":["效率提升","协作升级","知识复用"]}]}]}
+      """;
+
+    String body = "--" + boundary + "\\r\\n"
+      + "Content-Disposition: form-data; name=\\"id\\"\\r\\n\\r\\nTASK_ID\\r\\n"
+      + "--" + boundary + "\\r\\n"
+      + "Content-Disposition: form-data; name=\\"templateId\\"\\r\\n\\r\\nTEMPLATE_ID\\r\\n"
+      + "--" + boundary + "\\r\\n"
+      + "Content-Disposition: form-data; name=\\"data\\"\\r\\n\\r\\n" + outline + "\\r\\n"
+      + "--" + boundary + "--\\r\\n";
+
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create("https://open.docmee.cn/api/ppt/v2/generatePptxByAi"))
+      .header("token", "YOUR_TEMP_TOKEN")
+      .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+      .POST(HttpRequest.BodyPublishers.ofString(body))
+      .build();
+
+    HttpResponse<String> response = HttpClient.newHttpClient()
+      .send(request, HttpResponse.BodyHandlers.ofString());
+
+    System.out.println(response.body());
+  }
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>

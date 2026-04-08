@@ -1,0 +1,161 @@
+---
+title: '查询转换结果'
+---
+
+# 查询转换结果
+
+## 接口信息
+
+- 方法：<HttpMethodBadge method="GET" />
+- 路径：<InlineCode value="https://open.docmee.cn/api/ppt/v2/getConvertResult">https://open.docmee.cn/api/ppt/v2/getConvertResult</InlineCode>
+- 鉴权：请求头传 `token`
+
+## 接口作用
+
+查询当前任务的最终转换状态。该接口通常用于 AIL 智能布局任务的最终完成确认，也可用于恢复链路中的兜底判断。
+
+## 请求示例
+
+```bash
+curl --request GET \
+  --url "https://open.docmee.cn/api/ppt/v2/getConvertResult?taskId=task_xxx" \
+  --header "token: YOUR_TEMP_TOKEN"
+```
+
+## 请求参数
+
+| 参数名 | 类型 | 必填 | 示例 | 说明 |
+| --- | --- | --- | --- | --- |
+| `taskId` | `string` | 是 | `task_xxx` | 任务 ID。 |
+
+## 响应示例
+
+```json
+{
+  "code": 0,
+  "message": "操作成功",
+  "data": {
+    "status": 2,
+    "perPageStatus": {
+      "0": 2,
+      "1": 2,
+      "2": 2
+    }
+  }
+}
+```
+
+## 响应字段说明
+
+| 字段名 | 类型 | 示例 | 说明 |
+| --- | --- | --- | --- |
+| `code` | `number` | `0` | 通用响应状态码，`0` 表示成功。 |
+| `message` | `string` | `操作成功` | 服务端返回的结果说明。 |
+| `data.status` | `number` | `2` | 当前任务总体转换状态。 |
+| `data.perPageStatus` | `object` | `{"0":2,"1":2}` | 各页面的转换状态映射，键为页索引。 |
+
+## 状态值说明
+
+- `0`：`PENDING`，等待处理
+- `1`：`RUNNING`，处理中
+- `2`：`COMPLETED`，处理完成
+- `3`：`FAILED`，处理失败
+
+## 使用说明
+
+- 在 AIL 场景下，即使已经通过 [`latestData`](/api-reference/v2/latest-data) 拿到全部 `HTML`，仍建议继续轮询本接口，直到 `status=2`。
+- 如果返回 `status=3`，应在业务侧提示失败并结合前序日志或流式错误信息排查。
+- `perPageStatus` 适合用于定位具体哪一页仍在处理中或已经失败。
+
+## 多语言示例
+
+<ApiCodeTabs items={['cURL', 'Node.js', 'Python', 'Go', 'Java']}>
+  <ApiCodeTab>
+
+```bash
+curl --request GET \
+  --url "https://open.docmee.cn/api/ppt/v2/getConvertResult?taskId=task_xxx" \
+  --header "token: YOUR_TEMP_TOKEN"
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```js
+const response = await fetch(
+  'https://open.docmee.cn/api/ppt/v2/getConvertResult?taskId=TASK_ID',
+  {
+    headers: {
+      token: 'YOUR_TEMP_TOKEN'
+    }
+  }
+)
+
+console.log(await response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```python
+import requests
+
+response = requests.get(
+    'https://open.docmee.cn/api/ppt/v2/getConvertResult',
+    headers={'token': 'YOUR_TEMP_TOKEN'},
+    params={'taskId': 'TASK_ID'}
+)
+
+print(response.json())
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```go
+package main
+
+import (
+  "fmt"
+  "io"
+  "net/http"
+)
+
+func main() {
+  req, _ := http.NewRequest("GET", "https://open.docmee.cn/api/ppt/v2/getConvertResult?taskId=TASK_ID", nil)
+  req.Header.Set("token", "YOUR_TEMP_TOKEN")
+
+  resp, _ := http.DefaultClient.Do(req)
+  defer resp.Body.Close()
+  data, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(data))
+}
+```
+
+  </ApiCodeTab>
+  <ApiCodeTab>
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class GetConvertResultExample {
+  public static void main(String[] args) throws Exception {
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create("https://open.docmee.cn/api/ppt/v2/getConvertResult?taskId=TASK_ID"))
+      .header("token", "YOUR_TEMP_TOKEN")
+      .GET()
+      .build();
+
+    HttpResponse<String> response = HttpClient.newHttpClient()
+      .send(request, HttpResponse.BodyHandlers.ofString());
+
+    System.out.println(response.body());
+  }
+}
+```
+
+  </ApiCodeTab>
+</ApiCodeTabs>

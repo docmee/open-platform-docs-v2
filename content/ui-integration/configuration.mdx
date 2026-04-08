@@ -1,0 +1,178 @@
+---
+title: '初始化参数'
+---
+
+# 初始化参数
+
+结合当前 iframe 通信实现，SDK 初始化时可传入的配置大致分为“基础接入参数”“UI 展示参数”“创建流程参数”“编辑器控制参数”“通信参数”五类。
+
+## 基础接入参数
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `token` | `string` | 是 | 通过 [createApiToken](/api-reference/auth/create-api-token) 获取的用户级令牌 |
+| `container` | `string \| HTMLElement` | 是 | iframe 挂载容器，可以传 DOM 节点或容器 ID |
+| `page` | `'creator' \| 'dashboard' \| 'editor' \| 'customTemplate'` | 是 | 进入哪个 UI 页面 |
+| `creatorVersion` | `'v1' \| 'v2'` | 否 | 创建页版本选择；新接入统一推荐 `v2` |
+| `pptId` | `string` | 条件必填 | 当 `page='editor'` 时必须传 |
+| `templateId` | `string` | 否 | 某些高级跳转或模板标注流程会用到的模板 ID |
+| `lang` | `string` | 否 | UI 语言，例如 `zh`、`en`、`ja`、`ko`、`fr`、`de`、`pt` |
+| `mode` | `'light' \| 'dark'` | 否 | 明暗模式 |
+| `baseURL` | `string` | 否 | 服务端 API 代理地址 |
+| `DOMAIN` | `string` | 否 | 前端页面域名，国际版或代理场景常用 |
+
+## UI 展示参数
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `themeColor` | `string` | 否 | 主题色 |
+| `background` | `string` | 否 | iframe 背景色或背景图 |
+| `padding` | `string` | 否 | iframe 外层内边距，语法与 CSS `padding` 一致 |
+| `backgroundSize` | `string` | 否 | 背景图尺寸，语法与 CSS `background-size` 一致 |
+| `isMobile` | `boolean` | 否 | 是否按移动端模式渲染 |
+| `mobileMode` | `boolean` | 否 | 是否启用移动端专用模式 |
+| `hideDashboardButton` | `boolean` | 否 | 是否在创建页隐藏“我的作品”入口 |
+| `downloadButton` | `boolean \| string[]` | 否 | 控制可用下载方式 |
+| `css` | `string` | 否 | 注入自定义 CSS，支持 URL 或 CSS 字符串 |
+| `editorDisplay` | `('viewport' \| 'slidesList' \| 'statusBar' \| 'tools' \| 'header')[]` | 否 | 控制编辑器里哪些区域显示 |
+
+## 创建流程参数
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `creatorData` | `object` | 否 | 从业务侧直接带入创作数据 |
+| `creatorMode` | `('topic' \| 'material')[]` | 否 | 控制创建页允许的生成方式 |
+| `outlineExportFormat` | `'md' \| 'txt'` | 否 | 导出大纲的默认文件格式 |
+| `templateMenu` | `('system' \| 'custom' \| 'used')[]` | 否 | 模板面板默认展示的模板类型 |
+| `createCustomTemplateWhenEmpty` | `boolean` | 否 | 自定义模板为空时是否显示“立即创建” |
+| `createCustomTemplateWhenSelect` | `boolean` | 否 | 模板列表选择状态下是否展示“添加自定义模板” |
+| `animation` | `boolean` | 否 | 进入编辑页时是否优先走生成动画模式 |
+| `hidePdfWatermark` | `boolean` | 否 | 导出 PDF 时是否隐藏水印 |
+
+## 通信参数
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `targetOrigin` | `string` | 否 | `postMessage` 的目标域，未传时默认 `*` |
+
+## creatorData 的新版写法
+
+V2 下最关键的是 <InlineCode>type</InlineCode> 和实际内容字段要匹配：
+
+```typescript
+import { CreatorType } from '@docmee/sdk-ui'
+
+const creatorData = {
+  type: CreatorType.AI_GEN,
+  subject: 'AI 销售助手产品介绍',
+}
+
+const creatorDataByText = {
+  type: CreatorType.TEXT,
+  content: '请基于以下内容生成路演 PPT...',
+}
+```
+
+当前 SDK 运行时接受的 `creatorData` 会原样写入状态，所以除 `type / content / subject / file` 外，还会兼容一些流程字段，例如：
+
+- `createNow`
+- `templateId`
+- 业务侧自行约定的扩展字段
+
+但如果你是新接入，仍然建议只使用文档里已经稳定的字段组合。
+
+如果你使用纯 JavaScript，无法直接引用 <InlineCode>CreatorType</InlineCode> 枚举时，也可以传对应数字：
+
+- `1`：智能生成
+- `2`：上传文件生成
+- `3`：上传思维导图生成
+- `4`：Word 精准转 PPT
+- `5`：网页链接生成
+- `6`：粘贴文本生成
+- `7`：Markdown 大纲生成
+
+## 国际版接入
+
+如果你使用的是国际版，需要显式设置 <InlineCode>DOMAIN</InlineCode>：
+
+```typescript
+const docmee = new DocmeeUI({
+  container: 'app',
+  page: 'creator',
+  creatorVersion: 'v2',
+  DOMAIN: 'https://app.xpptx.com',
+  token: 'your_token',
+  lang: 'en',
+})
+```
+
+## page 与路由行为
+
+对外公开文档里最常用的 `page` 仍然是：
+
+- `creator`
+- `dashboard`
+- `editor`
+- `customTemplate`
+
+从当前 iframe 通信实现看，底层还识别以下高级路由值：
+
+- `creator-v2`
+- `templateCreator`
+- `templateMarker`
+
+这些值更适合桥接控制或调试场景，不建议首次接入就直接依赖。
+
+## 代理转发接入
+
+如果你需要把页面和 API 都收敛到自己的域名下，可以通过反向代理转发：
+
+```nginx
+server {
+  listen 8080;
+  server_name xxx.com;
+
+  location ^~ /api {
+    proxy_pass https://docmee.cn/api;
+    proxy_read_timeout 600;
+    proxy_connect_timeout 600;
+    proxy_send_timeout 600;
+    proxy_http_version 1.1;
+    proxy_set_header Host docmee.cn;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+
+  location / {
+    proxy_pass https://docmee.cn;
+    proxy_set_header Host docmee.cn;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+}
+```
+
+前端 SDK 对应写法：
+
+```typescript
+const docmee = new DocmeeUI({
+  container: 'app',
+  page: 'creator',
+  token: 'your_token',
+  DOMAIN: 'https://xxx.com:8080',
+  baseURL: 'https://xxx.com:8080/api',
+})
+```
+
+## 接入限制和注意事项
+
+- 不要在 <InlineCode>file://</InlineCode> 协议下运行 SDK，请使用本地 HTTP 服务或正式站点域名
+- `page='editor'` 时必须传 `pptId`
+- 新版创建页推荐统一使用 `creatorVersion: 'v2'`
+- 当你从外部注入正文内容时，优先使用 <InlineCode>content</InlineCode>，不要继续沿用旧版的 <InlineCode>text</InlineCode>
+- `css` 既可以传可访问的 CSS URL，也可以直接传 CSS 字符串；底层会分别走 `<link>` 和 `<style>` 注入
+- `targetOrigin` 建议在生产环境显式设置为你的宿主域名，不要长期使用默认的 `*`
+- `templateMenu`、`editorDisplay`、`mobileMode` 等更偏控制型的参数，应只在你明确知道目标页面行为时启用
+- 如果你需要更细粒度的业务拦截，继续阅读 [事件回调](/ui-integration/events)

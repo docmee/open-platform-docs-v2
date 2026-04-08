@@ -1,6 +1,7 @@
 'use client'
 
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { CopyIcon } from 'lucide-react'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 
 type InlineCodeProps = {
@@ -52,7 +53,7 @@ export function InlineCode({ children, value, copyable = true }: InlineCodeProps
   }
 
   return (
-    <Tooltip delayDuration={1400}>
+    <Tooltip>
       <TooltipTrigger>
         <button
           type="button"
@@ -65,7 +66,9 @@ export function InlineCode({ children, value, copyable = true }: InlineCodeProps
           <code>{children}</code>
         </button>
       </TooltipTrigger>
-      <TooltipContent>{copied ? '已复制' : `复制 ${copyValue}`}</TooltipContent>
+      <TooltipContent>
+        <CopyIcon className="size-3" /> 复制
+      </TooltipContent>
     </Tooltip>
   )
 }
