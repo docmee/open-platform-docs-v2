@@ -1,3 +1,4 @@
+import { LlmAllFloatingButton } from '@/components/layout/LlmAllFloatingButton'
 import { SidebarControlsBridge } from '@/components/layout/SidebarControlsBridge'
 import { DotPattern } from '@/components/ui/dot-pattern'
 import { HexagonPattern } from '@/components/ui/hexagon-pattern'
@@ -7,9 +8,9 @@ import type { Metadata } from 'next'
 import { Geist } from 'next/font/google'
 import Image from 'next/image'
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
-import 'nextra-theme-docs/style.css'
-import { Head } from 'nextra/components'
+import { Head, Search } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
+import 'nextra-theme-docs/style.css'
 import './global.css'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
@@ -68,7 +69,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <DotPattern
                 width={14}
                 height={14}
-                className={cn('mask-[radial-gradient(ellipse_at_top_center,white_10%,transparent_80%)] opacity-40 dark:opacity-10')}
+                className={cn(
+                  'mask-[radial-gradient(ellipse_at_top_center,white_10%,transparent_80%)] opacity-40 dark:opacity-10',
+                )}
               />
             </div>
             <HexagonPattern
@@ -81,12 +84,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 [9, 3],
               ]}
               className={cn(
-                'inset-x-0 top-[6vh] bottom-auto h-[90vh] stroke-accent/20 fill-transparent opacity-50 mask-[radial-gradient(ellipse_at_top,white_18%,transparent_72%)]'
+                'inset-x-0 top-[6vh] bottom-auto h-[90vh] stroke-accent/20 fill-transparent opacity-50 mask-[radial-gradient(ellipse_at_top,white_18%,transparent_72%)]',
               )}
             />
-            <div
-              className="absolute inset-x-0 top-0 h-[55vh] bg-[radial-gradient(circle_at_top,hsl(var(--accent)/0.18),transparent_62%)]"
-            />
+            <div className="absolute inset-x-0 top-0 h-[55vh] bg-[radial-gradient(circle_at_top,hsl(var(--accent)/0.18),transparent_62%)]" />
           </div>
           <div className="site-shell relative">
             <div
@@ -108,14 +109,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               editLink={null}
               copyPageButton={true}
               toc={{ title: '目录', float: true }}
+              search={<Search placeholder="🔍 搜索..." />}
               pageMap={await getPageMap('')}
               footer={footer}
               // banner={banner}
-              sidebar={{autoCollapse: true,defaultMenuCollapseLevel: 1}}
+              sidebar={{ autoCollapse: true, defaultMenuCollapseLevel: 1 }}
             >
               <SidebarControlsBridge />
               <main className="nextra-article-main relative z-10">{children}</main>
             </Layout>
+            <LlmAllFloatingButton />
           </div>
         </TooltipProvider>
       </body>

@@ -2,8 +2,10 @@
   "name": "docmee-docs-center",
   "private": true,
   "scripts": {
-    "dev": "next",
-    "build": "next build",
+    "generate:llm-all": "node scripts/generate-llm-all.mjs",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
+    "dev": "npm run generate:llm-all && next",
+    "build": "npm run generate:llm-all && next build",
     "start": "next start",
     "test": "vitest run"
   },
@@ -28,6 +30,7 @@
   "devDependencies": {
     "@types/node": "25.5.0",
     "@types/react": "19.2.14",
+    "pagefind": "^1.5.0",
     "sass": "^1.98.0",
     "typescript": "5.8.2",
     "vitest": "3.1.1"

@@ -399,6 +399,187 @@ samp {
   color: #c4b5fd;
 }
 
+.docmee-llm-fab {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 70;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2.1rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--docs-text);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  box-shadow: 0 10px 32px rgba(15, 23, 42, 0.16);
+  backdrop-filter: blur(12px);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.docmee-llm-fab:hover {
+  transform: translateY(-1px);
+  border-color: rgba(170, 75, 252, 0.36);
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.2);
+}
+
+.docmee-llm-fab:focus-visible {
+  outline: 2px solid rgba(170, 75, 252, 0.38);
+  outline-offset: 2px;
+}
+
+.docmee-llm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 72;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.docmee-llm-panel {
+  width: min(54rem, calc(100vw - 2rem));
+  height: min(78vh, 52rem);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.34);
+  overflow: hidden;
+}
+
+.docmee-llm-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.docmee-llm-panel-title {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.docmee-llm-panel-title strong {
+  font-size: 0.86rem;
+  line-height: 1.2;
+  color: #0f172a;
+}
+
+.docmee-llm-panel-title span {
+  font-size: 0.72rem;
+  color: #475569;
+}
+
+.docmee-llm-panel-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.docmee-llm-link,
+.docmee-llm-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.8rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(248, 250, 252, 0.94);
+  color: #1f2937;
+  font-size: 0.72rem;
+  padding: 0 0.55rem;
+}
+
+.docmee-llm-link:hover,
+.docmee-llm-close:hover {
+  border-color: rgba(170, 75, 252, 0.4);
+}
+
+.docmee-llm-panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: #f8fafc;
+}
+
+.docmee-llm-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.9rem;
+  margin: 0;
+  color: #334155;
+  font-size: 0.8rem;
+}
+
+.docmee-llm-status-error {
+  color: #9f1239;
+}
+
+.docmee-llm-spinner {
+  animation: docmee-llm-spin 0.8s linear infinite;
+}
+
+@keyframes docmee-llm-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.docmee-llm-source {
+  margin: 0;
+  min-height: 100%;
+  padding: 1rem;
+  white-space: pre;
+  color: #0f172a;
+  background: transparent;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    Liberation Mono,
+    Courier New,
+    monospace;
+}
+
+@media (max-width: 768px) {
+  .docmee-llm-fab {
+    right: 0.75rem;
+    bottom: 0.75rem;
+  }
+
+  .docmee-llm-overlay {
+    padding: 0.5rem;
+  }
+
+  .docmee-llm-panel {
+    width: calc(100vw - 1rem);
+    height: min(82vh, 38rem);
+  }
+}
+
 .dark {
   .nextra-sidebar>.nextra-sidebar-footer>button[aria-expanded] {
     border-color: rgba(255, 255, 255, 0.08) !important;
@@ -445,6 +626,58 @@ samp {
   .docmee-theme-switch-thumb {
     background: rgba(255, 255, 255, 0.96);
     color: #fbbf24;
+  }
+
+  .docmee-llm-fab {
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(15, 23, 42, 0.9);
+    color: #e2e8f0;
+    box-shadow: 0 16px 40px rgba(2, 6, 23, 0.65);
+  }
+
+  .docmee-llm-overlay {
+    background: rgba(2, 6, 23, 0.56);
+  }
+
+  .docmee-llm-panel {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(2, 6, 23, 0.95);
+    box-shadow: 0 22px 70px rgba(2, 6, 23, 0.8);
+  }
+
+  .docmee-llm-panel-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .docmee-llm-panel-title strong {
+    color: rgba(248, 250, 252, 0.96);
+  }
+
+  .docmee-llm-panel-title span {
+    color: rgba(203, 213, 225, 0.88);
+  }
+
+  .docmee-llm-link,
+  .docmee-llm-close {
+    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(15, 23, 42, 0.85);
+    color: rgba(248, 250, 252, 0.94);
+  }
+
+  .docmee-llm-panel-body {
+    background: rgba(15, 23, 42, 0.68);
+  }
+
+  .docmee-llm-status {
+    color: rgba(226, 232, 240, 0.92);
+  }
+
+  .docmee-llm-status-error {
+    color: #fda4af;
+  }
+
+  .docmee-llm-source {
+    color: rgba(241, 245, 249, 0.96);
   }
 }
 
