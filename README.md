@@ -1,6 +1,6 @@
 # DocMee Open Platform Docs V2
 
-基于 `Next.js 15` 与 `Nextra 4` 构建的中文开放平台文档站点，面向 DocMee AI PPT 的 UI 接入、API 接入与专项开放能力说明。
+
 
 <center>
 <img src="https://oss.docmee.cn/static/open/open-platform-logo.png" style="width:90px;height:90px"></img>
@@ -8,6 +8,8 @@
 [🌐 文多多AiPPT](https://wenduoduo.com) | [🤖 文多多开放平台](https://open.docmee.cn)
 </center>
 
+
+基于 `Next.js 15` 与 `Nextra 4` 构建的中文开放平台文档站点，面向 DocMee AI PPT 的 UI 接入、API 接入与专项开放能力说明。
 
 
 
