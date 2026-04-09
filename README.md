@@ -5,7 +5,7 @@
 <center>
 <img src="https://oss.docmee.cn/static/open/open-platform-logo.png" style="width:90px;height:90px"></img>
 
-[文多多AiPPT](https://wenduoduo.com) | [文多多开放平台](https://open.docmee.cn)
+[🌐 文多多AiPPT](https://wenduoduo.com) | [🤖 文多多开放平台](https://open.docmee.cn)
 </center>
 
 
