@@ -1,80 +1,64 @@
-import { HomeCardGrid } from '@/components/mdx/HomeCardGrid'
-import { HomeFlow } from '@/components/mdx/HomeFlow'
-import { HomeHero } from '@/components/mdx/HomeHero'
-import { HomeReadingPaths } from '@/components/mdx/HomeReadingPaths'
+---
+title: '能力总览'
+---
 
-<HomeHero
-  eyebrow="DocMee Open Platform"
-  title="面向 AI PPT 与演示内容生成的开放平台文档"
-  description="从快速开始到 API 参考，在统一的文档入口中完成接入、调试与上线准备。"
-  actions={[
-    { href: '/getting-started', label: '快速开始' },
-    { href: '/api-reference', label: '查看 API', kind: 'secondary' }
-  ]}
-/>
+# 能力总览
 
-<HomeCardGrid
-  items={[
-    {
-      href: '/how-to-use',
-      title: '使用指南',
-      description: '先理解平台定位、能力边界和推荐阅读顺序。',
-      badge: 'Overview'
-    },
-    {
-      href: '/getting-started',
-      title: '快速开始',
-      description: '完成接入准备，并跑通第一次生成流程。',
-      badge: 'Launch'
-    },
-    {
-      href: '/api-reference',
-      title: 'API 参考',
-      description: '查看接口分类、鉴权方式与详细调用说明。',
-      badge: 'Reference'
-    },
-    {
-      href: '/api-reference/all-api',
-      title: '全部接口',
-      description: '按目录总览当前开放的能力接口。',
-      badge: 'Catalog'
-    }
-  ]}
-/>
+本文用于帮助首次接触 DocMee Open Platform 的团队先理解平台的能力边界，再判断应该优先走 `UI 接入`、`API 接入` 还是 `开放能力`。
 
-<HomeFlow
-  steps={[
-    {
-      title: '理解平台能力',
-      description: '先阅读使用指南，确认适用场景、产品边界和文档入口。'
-    },
-    {
-      title: '完成首次接入',
-      description: '按快速开始准备凭证、构造请求并完成第一次调用。'
-    },
-    {
-      title: '进入接口联调',
-      description: '结合 API 参考和全部接口目录，完成业务集成与细节联调。'
-    }
-  ]}
-/>
+## 平台能做什么
 
-<HomeReadingPaths
-  items={[
-    {
-      href: '/getting-started',
-      title: '首次接入团队',
-      description: '从快速开始进入，优先完成最短接入链路。'
-    },
-    {
-      href: '/api-reference/all-api',
-      title: '先看接口全貌',
-      description: '直接浏览全部接口，快速定位自己需要的能力。'
-    },
-    {
-      href: '/api-reference/v2/create-task',
-      title: '开始调任务接口',
-      description: '从 v2 create-task 示例进入实际联调。'
-    }
-  ]}
-/>
+- 通过 `UI 接入` 把完整的 AI PPT 创作、模板、编辑和下载体验嵌入到业务系统
+- 通过 `API 接入` 控制任务创建、内容生成、模板处理、PPT 下载与管理链路
+- 通过 `开放能力` 获取特定能力模块，例如 HTML 转 PPTX 这类单点能力
+- 通过模板、PPT、记录和定价相关页面补齐完整的交付与运营链路
+
+## 能力边界
+
+DocMee 更适合承担“演示内容生产平台”角色，而不是单纯的静态模板下载站。它擅长的是：
+
+- 让业务系统快速获得 AI PPT 创作能力
+- 提供可编排的 PPT 生成链路和中间结果
+- 支持模板、文件、记录、下载等配套能力
+
+如果你的目标只是做一个完全自定义的前端编辑器，或者只需要少量静态模板展示，DocMee 并不是最直接的选择。
+
+## 如何选择接入方式
+
+### 什么时候选 UI 接入
+
+优先选择 [UI 接入](/ui-integration) 的场景：
+
+- 你希望快速嵌入完整工作台，而不是自己搭建整套前端体验
+- 你需要创作页、列表页、编辑页和模板页的一体化能力
+- 你更关注集成速度和完整体验，而不是逐个控制底层接口
+
+### 什么时候选 API 接入
+
+优先选择 [快速开始](/getting-started) 和 [API 参考](/api-reference) 的场景：
+
+- 你需要在服务端完全控制任务链路和中间结果
+- 你需要把生成能力编排进现有业务流程
+- 你需要按接口粒度管理模板、PPT、记录和下载逻辑
+
+### 什么时候选开放能力
+
+优先选择 [开放能力](/open-capabilities) 的场景：
+
+- 你只需要某个特定能力，而不是整套平台能力
+- 你希望从专项能力快速验证可行性
+- 你要处理类似 [HTML 转 PPTX](/open-capabilities/html-to-pptx/introduction) 这样的单点能力
+
+## 推荐阅读顺序
+
+1. 先阅读本页，确定你的目标更接近 `UI 接入`、`API 接入` 还是 `开放能力`
+2. 要嵌入完整工作台时，进入 [UI 接入](/ui-integration)
+3. 要从后端接口联调时，进入 [快速开始](/getting-started)
+4. 要查看所有接口分类时，进入 [API 参考](/api-reference)
+5. 要评估专项能力时，进入 [开放能力](/open-capabilities)
+
+## 下一步
+
+- 直接开始嵌入：阅读 [UI 接入](/ui-integration)
+- 跑通 API 主链路：阅读 [快速开始](/getting-started)
+- 浏览接口全貌：查看 [全部 API 接口](/api-reference/all-api)

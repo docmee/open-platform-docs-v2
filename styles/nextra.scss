@@ -524,9 +524,8 @@ article.nextra-body-typesetting-article {
 
 .nextra-code>pre {
   outline: none;
-  // border: 1px solid var(--docs-code-border);
   border-radius: var(--docs-radius-md);
-  background: rgb(241, 241, 241) !important;
+  background: rgb(246, 246, 248) !important;
   box-shadow: 0 0 0 2px var(--docs-code-border), 0px 0px 3px 3px rgba(111, 111, 111, 0.08);
   padding: 0.8rem 0.5rem !important;
 

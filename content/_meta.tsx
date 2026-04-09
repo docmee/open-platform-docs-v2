@@ -1,10 +1,21 @@
-import { AppWindowMacIcon, CodeIcon, DollarSignIcon, PackageIcon, RocketIcon } from 'lucide-react'
+import {
+  AppWindowMacIcon,
+  CodeIcon,
+  DollarSignIcon,
+  PackageIcon,
+  RocketIcon
+} from 'lucide-react'
 import { MetaRecord } from 'nextra'
 
 const meta: MetaRecord = {
   index: {
     title: '开始',
     display: 'hidden',
+  },
+  'how-to-use': {
+    title: '能力总览',
+    type: 'page',
+    display: 'hidden'
   },
   'ui-integration': {
     title: (

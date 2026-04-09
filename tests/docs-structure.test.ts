@@ -3,6 +3,13 @@ import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 
 describe('docs center structure', () => {
+  it('serves the docs site from the /docs-v2 base path', () => {
+    expect(existsSync('next.config.mjs')).toBe(true)
+
+    const nextConfigText = readFileSync('next.config.mjs', 'utf8')
+    expect(nextConfigText).toContain("basePath: '/docs-v2'")
+  })
+
   it('includes the required app shell files', () => {
     expect(existsSync('app/layout.tsx')).toBe(true)
     expect(existsSync('app/[[...mdxPath]]/page.tsx')).toBe(true)
@@ -29,6 +36,9 @@ describe('docs center structure', () => {
   it('defines Chinese navigation labels in root meta', () => {
     expect(existsSync('content/_meta.tsx')).toBe(true)
     const metaText = readFileSync('content/_meta.tsx', 'utf8')
+    expect(metaText).toContain("'how-to-use':")
+    expect(metaText).toContain('能力总览')
+    expect(metaText).toContain("display: 'hidden'")
     expect(metaText).toContain("'ui-integration':")
     expect(metaText).toContain('UI 接入')
     expect(metaText).toContain("'getting-started':")
@@ -36,10 +46,14 @@ describe('docs center structure', () => {
     expect(metaText).toContain('API 参考')
   })
 
-  it('places ui integration first in the top-level navbar order', () => {
+  it('places capability overview before implementation-focused sections', () => {
     const metaText = readFileSync('content/_meta.tsx', 'utf8')
+    expect(metaText.indexOf("'how-to-use':")).toBeGreaterThan(-1)
     expect(metaText.indexOf("'ui-integration':")).toBeGreaterThan(-1)
     expect(metaText.indexOf("'getting-started':")).toBeGreaterThan(-1)
+    expect(metaText.indexOf("'how-to-use':")).toBeLessThan(
+      metaText.indexOf("'ui-integration':")
+    )
     expect(metaText.indexOf("'ui-integration':")).toBeLessThan(
       metaText.indexOf("'getting-started':")
     )
@@ -51,6 +65,25 @@ describe('docs center structure', () => {
     const rootMetaText = readFileSync('content/_meta.tsx', 'utf8')
     expect(rootMetaText).toContain("'open-capabilities':")
     expect(rootMetaText).toContain('开放能力')
+  })
+
+  it('uses the homepage as the capability overview page', () => {
+    const homeText = readFileSync('content/index.mdx', 'utf8')
+    expect(homeText).toContain("# 能力总览")
+    expect(homeText).toContain('能力边界')
+    expect(homeText).toContain('如何选择接入方式')
+    expect(homeText).toContain('/ui-integration')
+    expect(homeText).toContain('/getting-started')
+    expect(homeText).toContain('/open-capabilities/html-to-pptx/introduction')
+  })
+
+  it('upgrades how-to-use into a durable capability overview page', () => {
+    const overviewText = readFileSync('content/how-to-use/index.mdx', 'utf8')
+    expect(overviewText).toContain('能力总览')
+    expect(overviewText).toContain('能力边界')
+    expect(overviewText).toContain('UI 接入')
+    expect(overviewText).toContain('API 接入')
+    expect(overviewText).toContain('开放能力')
   })
 
   it('documents the ui integration multi-page navigation', () => {
@@ -262,16 +295,12 @@ describe('docs center structure', () => {
     expect(packageText).not.toContain('"shiki"')
   })
 
-  it('uses redesigned homepage sections', () => {
+  it('uses plain capability-overview content on homepage', () => {
     const homeText = readFileSync('content/index.mdx', 'utf8')
-    expect(homeText).toContain('HomeHero')
-    expect(homeText).toContain('HomeCardGrid')
-    expect(homeText).toContain('HomeFlow')
-    expect(homeText).toContain('HomeReadingPaths')
-
-    expect(existsSync('components/mdx/HomeHero.tsx')).toBe(true)
-    expect(existsSync('components/mdx/HomeCardGrid.tsx')).toBe(true)
-    expect(existsSync('components/mdx/HomeFlow.tsx')).toBe(true)
-    expect(existsSync('components/mdx/HomeReadingPaths.tsx')).toBe(true)
+    expect(homeText).toContain("# 能力总览")
+    expect(homeText).not.toContain('HomeHero')
+    expect(homeText).not.toContain('HomeCardGrid')
+    expect(homeText).not.toContain('HomeFlow')
+    expect(homeText).not.toContain('HomeReadingPaths')
   })
 })

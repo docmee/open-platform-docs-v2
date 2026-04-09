@@ -8,7 +8,7 @@ import { Geist } from 'next/font/google'
 import Image from 'next/image'
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import 'nextra-theme-docs/style.css'
-import { Banner, Head } from 'nextra/components'
+import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import './global.css'
 
@@ -55,7 +55,7 @@ const footer = (
   </Footer>
 )
 
-const banner = <Banner storageKey='docmee-open-platform-docs-banner'  >文多多AiPPT 开放平台文档</Banner>
+// const banner = <Banner storageKey='docmee-open-platform-docs-banner'  >文多多AiPPT 开放平台文档</Banner>
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -68,12 +68,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <DotPattern
                 width={14}
                 height={14}
-                className={cn('mask-[radial-gradient(ellipse_at_top_center,white_10%,transparent_80%)] opacity-50')}
+                className={cn('mask-[radial-gradient(ellipse_at_top_center,white_10%,transparent_80%)] opacity-40 dark:opacity-10')}
               />
             </div>
             <HexagonPattern
-              radius={24}
-              gap={8}
+              radius={14}
+              gap={5}
               hexagons={[
                 [2, 1],
                 [6, 2],
@@ -81,7 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 [9, 3],
               ]}
               className={cn(
-                'inset-x-0 top-[6vh] bottom-auto h-[90vh] stroke-accent/20 fill-accent/8 opacity-60 mask-[radial-gradient(ellipse_at_top,white_18%,transparent_72%)]'
+                'inset-x-0 top-[6vh] bottom-auto h-[90vh] stroke-accent/20 fill-transparent opacity-50 mask-[radial-gradient(ellipse_at_top,white_18%,transparent_72%)]'
               )}
             />
             <div
@@ -110,7 +110,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               toc={{ title: '目录', float: true }}
               pageMap={await getPageMap('')}
               footer={footer}
-              banner={banner}
+              // banner={banner}
               sidebar={{autoCollapse: true,defaultMenuCollapseLevel: 1}}
             >
               <SidebarControlsBridge />
